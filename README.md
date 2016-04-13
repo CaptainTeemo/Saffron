@@ -2,9 +2,12 @@
 <!--# Saffron-->
 
 <p align="center">
-  <h1>Saffron</h1>
   <img src="logo.png">
+  <br></br>
 </p>
+<h1 align="center">
+Saffron
+</h1>
 
 [![Build Status](https://travis-ci.org/CaptainTeemo/Saffron.svg?branch=master)](https://travis-ci.org/CaptainTeemo/Saffron)
 [![codecov.io](https://codecov.io/github/CaptainTeemo/Saffron/coverage.svg?branch=master)](https://codecov.io/github/CaptainTeemo/Saffron?branch=master)
