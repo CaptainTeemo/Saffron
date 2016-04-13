@@ -16,8 +16,8 @@
 		CF2DEDB71CAA59B100969B4E /* CacheDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2DEDB61CAA59B100969B4E /* CacheDemoUITests.swift */; };
 		CF2DEDD71CAA5A9200969B4E /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2DEDD51CAA5A9200969B4E /* ImageCell.swift */; };
 		CF2DEDD81CAA5A9200969B4E /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF2DEDD61CAA5A9200969B4E /* ImageCell.xib */; };
-		CF43F50D1CBE60DA00A70731 /* Saffron.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF43F50A1CBE60D200A70731 /* Saffron.framework */; };
-		CF43F50E1CBE60DA00A70731 /* Saffron.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CF43F50A1CBE60D200A70731 /* Saffron.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CF43F51B1CBE6ED700A70731 /* Saffron.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF43F5181CBE6ECF00A70731 /* Saffron.framework */; };
+		CF43F51C1CBE6ED700A70731 /* Saffron.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CF43F5181CBE6ECF00A70731 /* Saffron.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,23 +35,23 @@
 			remoteGlobalIDString = CF2DED921CAA59B100969B4E;
 			remoteInfo = CacheDemo;
 		};
-		CF43F5091CBE60D200A70731 /* PBXContainerItemProxy */ = {
+		CF43F5171CBE6ECF00A70731 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = CF43F5041CBE60D200A70731 /* Saffron.xcodeproj */;
+			containerPortal = CF43F5121CBE6ECF00A70731 /* Saffron.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = CFFA74961CBE2A82004D1FD9;
 			remoteInfo = Saffron;
 		};
-		CF43F50B1CBE60D200A70731 /* PBXContainerItemProxy */ = {
+		CF43F5191CBE6ECF00A70731 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = CF43F5041CBE60D200A70731 /* Saffron.xcodeproj */;
+			containerPortal = CF43F5121CBE6ECF00A70731 /* Saffron.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = CFFA74A01CBE2A82004D1FD9;
 			remoteInfo = SaffronTests;
 		};
-		CF43F50F1CBE60DA00A70731 /* PBXContainerItemProxy */ = {
+		CF43F51D1CBE6ED700A70731 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = CF43F5041CBE60D200A70731 /* Saffron.xcodeproj */;
+			containerPortal = CF43F5121CBE6ECF00A70731 /* Saffron.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = CFFA74951CBE2A82004D1FD9;
 			remoteInfo = Saffron;
@@ -65,7 +65,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				CF43F50E1CBE60DA00A70731 /* Saffron.framework in Embed Frameworks */,
+				CF43F51C1CBE6ED700A70731 /* Saffron.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -88,7 +88,7 @@
 		CF2DEDB81CAA59B100969B4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CF2DEDD51CAA5A9200969B4E /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		CF2DEDD61CAA5A9200969B4E /* ImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
-		CF43F5041CBE60D200A70731 /* Saffron.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Saffron.xcodeproj; path = Saffron/Saffron.xcodeproj; sourceTree = SOURCE_ROOT; };
+		CF43F5121CBE6ECF00A70731 /* Saffron.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Saffron.xcodeproj; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,7 +96,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CF43F50D1CBE60DA00A70731 /* Saffron.framework in Frameworks */,
+				CF43F51B1CBE6ED700A70731 /* Saffron.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,7 +140,7 @@
 		CF2DED951CAA59B100969B4E /* CacheDemo */ = {
 			isa = PBXGroup;
 			children = (
-				CF43F5041CBE60D200A70731 /* Saffron.xcodeproj */,
+				CF43F5121CBE6ECF00A70731 /* Saffron.xcodeproj */,
 				CF2DED961CAA59B100969B4E /* AppDelegate.swift */,
 				CF2DED981CAA59B100969B4E /* ViewController.swift */,
 				CF2DED9A1CAA59B100969B4E /* Main.storyboard */,
@@ -171,11 +171,11 @@
 			path = CacheDemoUITests;
 			sourceTree = "<group>";
 		};
-		CF43F5051CBE60D200A70731 /* Products */ = {
+		CF43F5131CBE6ECF00A70731 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CF43F50A1CBE60D200A70731 /* Saffron.framework */,
-				CF43F50C1CBE60D200A70731 /* SaffronTests.xctest */,
+				CF43F5181CBE6ECF00A70731 /* Saffron.framework */,
+				CF43F51A1CBE6ECF00A70731 /* SaffronTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -195,7 +195,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				CF43F5101CBE60DA00A70731 /* PBXTargetDependency */,
+				CF43F51E1CBE6ED700A70731 /* PBXTargetDependency */,
 			);
 			name = CacheDemo;
 			productName = CacheDemo;
@@ -275,8 +275,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = CF43F5051CBE60D200A70731 /* Products */;
-					ProjectRef = CF43F5041CBE60D200A70731 /* Saffron.xcodeproj */;
+					ProductGroup = CF43F5131CBE6ECF00A70731 /* Products */;
+					ProjectRef = CF43F5121CBE6ECF00A70731 /* Saffron.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -289,18 +289,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		CF43F50A1CBE60D200A70731 /* Saffron.framework */ = {
+		CF43F5181CBE6ECF00A70731 /* Saffron.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Saffron.framework;
-			remoteRef = CF43F5091CBE60D200A70731 /* PBXContainerItemProxy */;
+			remoteRef = CF43F5171CBE6ECF00A70731 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		CF43F50C1CBE60D200A70731 /* SaffronTests.xctest */ = {
+		CF43F51A1CBE6ECF00A70731 /* SaffronTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = SaffronTests.xctest;
-			remoteRef = CF43F50B1CBE60D200A70731 /* PBXContainerItemProxy */;
+			remoteRef = CF43F5191CBE6ECF00A70731 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -373,10 +373,10 @@
 			target = CF2DED921CAA59B100969B4E /* CacheDemo */;
 			targetProxy = CF2DEDB31CAA59B100969B4E /* PBXContainerItemProxy */;
 		};
-		CF43F5101CBE60DA00A70731 /* PBXTargetDependency */ = {
+		CF43F51E1CBE6ED700A70731 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Saffron;
-			targetProxy = CF43F50F1CBE60DA00A70731 /* PBXContainerItemProxy */;
+			targetProxy = CF43F51D1CBE6ED700A70731 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
