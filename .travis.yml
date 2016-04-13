@@ -4,6 +4,6 @@ xcode_project: Saffron.xcodeproj
 xcode_scheme: Saffron
 xcode_sdk: iphonesimulator9.3
 script:
-  - xctool -project Saffron.xcodeproj -scheme Saffron build test -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6S,OS=9.3' GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES
+  - xctool -project Saffron.xcodeproj -scheme Saffron build test -sdk iphonesimulator9.3 -destination 'platform=iOS Simulator,name=iPhone 6S,OS=9.3' GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES
 after_success:
   - bash <(curl -s https://codecov.io/bash)
