@@ -1,6 +1,7 @@
 language: objective-c
 osx_image: xcode7.3
 script:
-  - xcodebuild -project Saffron.xcodeproj -scheme Saffron build test -sdk iphonesimulator9.3 GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES
+    - open -b com.apple.iphonesimulator
+    - xcodebuild -project Saffron.xcodeproj -scheme Saffron build test -sdk iphonesimulator9.3 GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES
 after_success:
   - bash <(curl -s https://codecov.io/bash)
