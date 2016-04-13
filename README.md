@@ -1,5 +1,11 @@
-![](logo.png)
-# Saffron
+<!--![](logo.png)-->
+<!--# Saffron-->
+
+<p align="center">
+  <h1>Saffron</h1>
+  <img src="logo.png">
+</p>
+
 [![Build Status](https://travis-ci.org/CaptainTeemo/Saffron.svg?branch=master)](https://travis-ci.org/CaptainTeemo/Saffron)
 [![codecov.io](https://codecov.io/github/CaptainTeemo/Saffron/coverage.svg?branch=master)](https://codecov.io/github/CaptainTeemo/Saffron?branch=master)
 [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/CaptainTeemo/Saffron/master/LICENSE.md)
