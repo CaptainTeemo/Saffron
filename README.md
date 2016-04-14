@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo.png">
+  <img src="https://raw.githubusercontent.com/CaptainTeemo/Saffron/master/logo.png">
 </p>
 # Saffron
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
@@ -33,7 +33,7 @@ let cachedString = stringCache.fetch(key)
 
 
 ##### GIF image support
-![](demo_gif.gif)
+![](https://raw.githubusercontent.com/CaptainTeemo/Saffron/master/demo_gif.gif)
 
 
 ##### Circle reveal animation
@@ -43,7 +43,7 @@ func whereImageViewShouldBeInitialized() {
     imageView.sf_setAnimationLoader(loader)
 }
 ```
-![](demo_reveal.gif)
+![](https://raw.githubusercontent.com/CaptainTeemo/Saffron/master/demo_reveal.gif)
 
 
 ##### Fade reveal animation
@@ -53,7 +53,7 @@ func whereImageViewShouldBeInitialized() {
     imageView.sf_setAnimationLoader(loader)
 }
 ```
-![](demo_fade.gif)
+![](https://raw.githubusercontent.com/CaptainTeemo/Saffron/master/demo_fade.gif)
 
 
 ##### Report download progress
@@ -63,9 +63,10 @@ func whereImageViewShouldBeInitialized() {
     imageView.sf_setAnimationLoader(loader)
 }
 ```
-![](demo_progress.gif)
+![](https://raw.githubusercontent.com/CaptainTeemo/Saffron/master/demo_progress.gif)
 
-<!--### [API Documentation](https://raw.github.com/CaptainTeemo/Saffron/master/docs/index.html)-->
+### [API Documentation](http://rawgit.com/CaptainTeemo/Saffron/master/docs/index.html)
+
 
 ### Requirements
 * iOS 8.0+
