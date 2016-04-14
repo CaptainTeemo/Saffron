@@ -38,7 +38,7 @@ let cachedString = stringCache.fetch(key)
 
 ##### Circle reveal animation
 ```swift
-func whereImageViewHasBeenInitialized() {
+func whereImageViewShouldBeInitialized() {
     let loader = DefaultAnimator(revealStyle: .Circle, reportProgress: false)
     imageView.sf_setAnimationLoader(loader)
 }
@@ -48,7 +48,7 @@ func whereImageViewHasBeenInitialized() {
 
 ##### Fade reveal animation
 ```swift
-func whereImageViewHasBeenInitialized() {
+func whereImageViewShouldBeInitialized() {
     let loader = DefaultAnimator(revealStyle: .Fade, reportProgress: false)
     imageView.sf_setAnimationLoader(loader)
 }
@@ -58,7 +58,7 @@ func whereImageViewHasBeenInitialized() {
 
 ##### Report download progress
 ```swift
-func whereImageViewHasBeenInitialized() {
+func whereImageViewShouldBeInitialized() {
     let loader = DefaultAnimator(revealStyle: .Fade, reportProgress: true)
     imageView.sf_setAnimationLoader(loader)
 }
