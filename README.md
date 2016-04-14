@@ -21,7 +21,7 @@ Saffron is a framework that gives a helping hand to download images and manage c
 ```swift
 imageView.sf_setImage(#some image url string#)
 ```
-That's it!
+That's all!
 
 ##### Cache
 ```swift
