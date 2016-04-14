@@ -12,7 +12,7 @@ Saffron is a framework that gives a helping hand to download images and manage c
 
 ### Features
 * Generic Cache struct that can cache everything.
-* Convenient extensions for UIImageView do download and cache work for you.
+* Convenient extensions for UIImageView that do download and cache things for you.
 * Built in loading animator which can be configured.
 * GIF image support.
 * Easy to use.
