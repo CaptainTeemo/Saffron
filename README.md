@@ -65,6 +65,7 @@ func whereImageViewShouldBeInitialized() {
 ```
 ![](demo_progress.gif)
 
+<!--### [API Documentation](https://raw.github.com/CaptainTeemo/Saffron/master/docs/index.html)-->
 
 ### Requirements
 * iOS 8.0+
