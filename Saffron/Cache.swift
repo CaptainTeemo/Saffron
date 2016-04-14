@@ -34,6 +34,9 @@ private class CacheEntry: NSObject {
     }
 }
 
+/**
+ *  Cache everything which conforms to protocol `DataConvertible`.
+ */
 public struct Cache<T: DataConvertible where T.Result == T> {
     
     // MARK: Properties
@@ -76,7 +79,7 @@ public struct Cache<T: DataConvertible where T.Result == T> {
         return self._cacheDirectoryPath
     }()
     
-    // MARK: Init
+    // MARK: Init with a cache path.
     
     public init(cacheDirectoryPath: String) {
         _cacheDirectoryPath = cacheDirectoryPath

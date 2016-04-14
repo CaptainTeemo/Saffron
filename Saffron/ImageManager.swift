@@ -10,6 +10,7 @@ import Foundation
 
 private let ErrorDomain = "SaffronErrorDomain"
 
+/// Handle image download and cache stuff.
 public class ImageManager {
     private static let _sharedManager = ImageManager()
     private var _cache = Cache<UIImage>(cacheDirectoryPath: ImageManager.cachePath)
@@ -43,10 +44,25 @@ public class ImageManager {
         }
     }
     
+    /**
+     Write image to cache.
+     
+     - parameter key:   Key.
+     - parameter image: Value.
+     - parameter done:  Callback.
+     */
     func write(key: String, image: UIImage?, done: ((Bool) -> Void)? = nil) {
         _cache.write(key, value: image, done: done)
     }
     
+    /**
+     Fetch image from cache.
+     
+     - parameter key:             Key.
+     - parameter skipMemoryQuery: Search in memory first or not.
+     
+     - returns: Cached image or nil.
+     */
     func fetch(key: String, skipMemoryQuery: Bool = false) -> UIImage? {
         return _cache.fetch(key, skipMemoryQuery: skipMemoryQuery)
     }

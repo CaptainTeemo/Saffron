@@ -8,8 +8,17 @@
 
 import Foundation
 
+/**
+ *  Customized animator must conforms to this protocol.
+ */
 @objc public protocol LoadingAnimator {
+    /**
+     Start loading animation.
+     */
     func startAnimation()
+    /**
+     Remove animations.
+     */
     func removeAnimation()
     
     /**
@@ -25,12 +34,19 @@ import Foundation
 
 private let minMargin: CGFloat = 100
 
+/**
+ Animation when showing image.
+ */
 public enum RevealStyle {
+        /// Fade in effect.
     case Fade
+        /// Circle mask effect.
     case Circle
+        /// No effect.
     case None
 }
 
+/// Builtin loading animator.
 public class DefaultAnimator: UIView {
     private let loaderLayer = CAShapeLayer()
     
@@ -44,6 +60,15 @@ public class DefaultAnimator: UIView {
     
     private var _revealStyle: RevealStyle = .None
     
+    /**
+     Init
+     
+     - parameter loaderColor:    Optional loader color. Default is UIColor.redColor()
+     - parameter revealStyle:    Choose your favorite style.
+     - parameter reportProgress: If report download progress.
+     
+     - returns: Instance.
+     */
     public init(loaderColor: UIColor = UIColor.redColor(), revealStyle: RevealStyle, reportProgress: Bool) {
         super.init(frame: CGRectZero)
         commonInit()
@@ -58,10 +83,9 @@ public class DefaultAnimator: UIView {
         commonInit()
     }
     
+    /// Please use init(loaderColor:revealStyle:reportProgress:)
     required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        
-        commonInit()
+        fatalError("Please use init(loaderColor:revealStyle:reportProgress:)")
     }
     
     func commonInit() {
@@ -71,6 +95,9 @@ public class DefaultAnimator: UIView {
         layer.addSublayer(loaderLayer)
     }
     
+    /**
+     Change frame here. Just ignore.
+     */
     override public func layoutSubviews() {
         super.layoutSubviews()
         
@@ -159,6 +186,9 @@ public class DefaultAnimator: UIView {
 }
 
 extension DefaultAnimator: LoadingAnimator {
+    /**
+     Start loading animation.
+     */
     public func startAnimation() {
         hidden = false
         if _reportProgress {
@@ -168,10 +198,19 @@ extension DefaultAnimator: LoadingAnimator {
         }
     }
     
+    /**
+     Remove animations.
+     */
     public func removeAnimation() {
         dismiss()
     }
     
+    /**
+     Handle progress things.
+     
+     - parameter received: Received bytes.
+     - parameter total:    Total bytes.
+     */
     public func progress(received: Int64, _ total: Int64) {
         if _reportProgress {
             let progress = CGFloat(received) / CGFloat(total)
@@ -181,12 +220,16 @@ extension DefaultAnimator: LoadingAnimator {
         }
     }
     
+    /**
+     Show image with animation.
+     */
     public func reveal() {
        revealAnimation(_revealStyle)
     }
 }
 
 extension DefaultAnimator {
+    /// This should not be public.
     override public func animationDidStop(anim: CAAnimation, finished flag: Bool) {
         superview?.layer.mask = nil
     }

@@ -12,7 +12,20 @@ public protocol DataConvertible {
     
     associatedtype Result
     
+    /**
+     Convert to data.
+     
+     - returns: Converted data.
+     */
     func toData() -> NSData?
+    
+    /**
+     Convert from data.
+     
+     - parameter data: Source data.
+     
+     - returns: Converted object.
+     */
     static func fromData(data: NSData) -> Result?
 }
 

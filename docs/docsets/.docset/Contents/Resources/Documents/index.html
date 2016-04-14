@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a title="  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html"> Docs</a> (88% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html"> Reference</a>
+        <img id="carat" src="img/carat.png" />
+          Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/DefaultAnimator.html">DefaultAnimator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/ImageManager.html">ImageManager</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Enums/RevealStyle.html">RevealStyle</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Extensions/String.html">String</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/UIImage.html">UIImage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/UIImageView.html">UIImageView</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Protocols/DataConvertible.html">DataConvertible</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/LoadingAnimator.html">LoadingAnimator</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Structs/Cache.html">Cache</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            
+            <p align="center">
+  <img src="logo.png">
+</p>
+<a href='#saffron' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='saffron'>Saffron</h1>
+
+<p><a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible"></a>
+<a href="https://travis-ci.org/CaptainTeemo/Saffron"><img src="https://travis-ci.org/CaptainTeemo/Saffron.svg?branch=master" alt="Build Status"></a>
+<a href="https://codecov.io/github/CaptainTeemo/Saffron?branch=master"><img src="https://codecov.io/github/CaptainTeemo/Saffron/coverage.svg?branch=master" alt="codecov.io"></a>
+<a href="https://raw.githubusercontent.com/CaptainTeemo/Saffron/master/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-lightgrey.svg" alt="GitHub license"></a>
+<a href="https://github.com/CaptainTeemo/Saffron/releases"><img src="https://img.shields.io/github/release/CaptainTeemo/Saffron.svg" alt="GitHub release"></a></p>
+
+<p>Saffron is a framework that gives a helping hand to download images and manage caches.</p>
+<a href='#features' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='features'>Features</h3>
+
+<ul>
+<li>Generic Cache struct that can cache everything.</li>
+<li>Convenient extensions for UIImageView do download and cache work for you.</li>
+<li>Built in loading animator which can be configured.</li>
+<li>GIF image support.</li>
+<li>Easy to use.</li>
+</ul>
+<a href='#at_a_glance' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='at_a_glance'>At a glance</h3>
+<pre class="highlight swift"><code><span class="n">imageView</span><span class="o">.</span><span class="nf">sf_setImage</span><span class="p">(</span><span class="err">#</span><span class="n">some</span> <span class="n">image</span> <span class="n">url</span> <span class="n">string</span><span class="err">#</span><span class="p">)</span>
+</code></pre>
+
+<p>That&rsquo;s it!</p>
+<a href='#gif_image_support' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h5 id='gif_image_support'>GIF image support</h5>
+
+<p><img src="demo_gif.gif" alt=""></p>
+<a href='#circle_reveal_animation' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h5 id='circle_reveal_animation'>Circle reveal animation</h5>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereImageViewHasBeenInitialized</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">loader</span> <span class="o">=</span> <span class="kt">DefaultAnimator</span><span class="p">(</span><span class="nv">revealStyle</span><span class="p">:</span> <span class="o">.</span><span class="kt">Circle</span><span class="p">,</span> <span class="nv">reportProgress</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
+    <span class="n">imageView</span><span class="o">.</span><span class="nf">sf_setAnimationLoader</span><span class="p">(</span><span class="n">loader</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+<p><img src="demo_reveal.gif" alt=""></p>
+<a href='#fade_reveal_animation' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h5 id='fade_reveal_animation'>Fade reveal animation</h5>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereImageViewHasBeenInitialized</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">loader</span> <span class="o">=</span> <span class="kt">DefaultAnimator</span><span class="p">(</span><span class="nv">revealStyle</span><span class="p">:</span> <span class="o">.</span><span class="kt">Fade</span><span class="p">,</span> <span class="nv">reportProgress</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
+    <span class="n">imageView</span><span class="o">.</span><span class="nf">sf_setAnimationLoader</span><span class="p">(</span><span class="n">loader</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+<p><img src="demo_fade.gif" alt=""></p>
+<a href='#report_download_progress' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h5 id='report_download_progress'>Report download progress</h5>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereImageViewHasBeenInitialized</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">loader</span> <span class="o">=</span> <span class="kt">DefaultAnimator</span><span class="p">(</span><span class="nv">revealStyle</span><span class="p">:</span> <span class="o">.</span><span class="kt">Fade</span><span class="p">,</span> <span class="nv">reportProgress</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+    <span class="n">imageView</span><span class="o">.</span><span class="nf">sf_setAnimationLoader</span><span class="p">(</span><span class="n">loader</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+<p><img src="demo_progress.gif" alt=""></p>
+<a href='#requirements' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='requirements'>Requirements</h3>
+
+<ul>
+<li>iOS 8.0+</li>
+<li>Xcode 7.3+</li>
+</ul>
+<a href='#carthage' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='carthage'>Carthage</h3>
+
+<p>Put <code>github &quot;CaptainTeemo/Saffron&quot;</code> in your cartfile and run <code>carthage update</code> from terminal, then drag built framework to you project.</p>
+
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-04-14)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

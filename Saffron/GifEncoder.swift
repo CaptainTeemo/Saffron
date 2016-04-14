@@ -32,7 +32,7 @@ extension UIImage {
         return UIImage.animatedImage(source)
     }
     
-    class func delayForImageAtIndex(index: Int, source: CGImageSource!) -> Double {
+    private class func delayForImageAtIndex(index: Int, source: CGImageSource!) -> Double {
         var delay = 0.1
         
         let cfProperties = CGImageSourceCopyPropertiesAtIndex(source, index, nil)
@@ -54,7 +54,7 @@ extension UIImage {
         return delay
     }
     
-    class func gcdForPair(a: Int?, _ b: Int?) -> Int {
+    private class func gcdForPair(a: Int?, _ b: Int?) -> Int {
         var a = a
         var b = b
         // Check if one of them is nil
@@ -89,7 +89,7 @@ extension UIImage {
         }
     }
     
-    class func gcdForArray(array: [Int]) -> Int {
+    private class func gcdForArray(array: [Int]) -> Int {
         if array.isEmpty {
             return 1
         }
@@ -103,7 +103,7 @@ extension UIImage {
         return gcd
     }
     
-    class func animatedImage(source: CGImageSource) -> UIImage? {
+    private class func animatedImage(source: CGImageSource) -> UIImage? {
         let count = CGImageSourceGetCount(source)
         
         if count <= 1 {
@@ -157,7 +157,7 @@ extension UIImage {
         return animation
     }
     
-    class func decodeImage(image: UIImage) -> UIImage? {
+    private class func decodeImage(image: UIImage) -> UIImage? {
         let imageRef = image.CGImage
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         
