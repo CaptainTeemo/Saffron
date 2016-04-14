@@ -5,7 +5,7 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Build Status](https://travis-ci.org/CaptainTeemo/Saffron.svg?branch=master)](https://travis-ci.org/CaptainTeemo/Saffron)
 [![codecov.io](https://codecov.io/github/CaptainTeemo/Saffron/coverage.svg?branch=master)](https://codecov.io/github/CaptainTeemo/Saffron?branch=master)
-[![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/CaptainTeemo/Saffron/master/LICENSE.md)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/CaptainTeemo/Saffron/master/LICENSE.md)
 [![GitHub release](https://img.shields.io/github/release/CaptainTeemo/Saffron.svg)](https://github.com/CaptainTeemo/Saffron/releases)
 
 Saffron is a framework that gives a helping hand to download images and manage caches.
@@ -21,7 +21,15 @@ Saffron is a framework that gives a helping hand to download images and manage c
 ```swift
 imageView.sf_setImage(#some image url string#)
 ```
-That's it!
+That's all!
+
+##### Cache
+```swift
+var stringCache = Cache<String>(cacheDirectoryPath: cachePath)
+stringCache.write(key, value: value)
+
+let cachedString = stringCache.fetch(key)
+```
 
 
 ##### GIF image support
@@ -30,7 +38,7 @@ That's it!
 
 ##### Circle reveal animation
 ```swift
-func whereImageViewHasBeenInitialized() {
+func whereImageViewShouldBeInitialized() {
     let loader = DefaultAnimator(revealStyle: .Circle, reportProgress: false)
     imageView.sf_setAnimationLoader(loader)
 }
@@ -40,7 +48,7 @@ func whereImageViewHasBeenInitialized() {
 
 ##### Fade reveal animation
 ```swift
-func whereImageViewHasBeenInitialized() {
+func whereImageViewShouldBeInitialized() {
     let loader = DefaultAnimator(revealStyle: .Fade, reportProgress: false)
     imageView.sf_setAnimationLoader(loader)
 }
@@ -50,7 +58,7 @@ func whereImageViewHasBeenInitialized() {
 
 ##### Report download progress
 ```swift
-func whereImageViewHasBeenInitialized() {
+func whereImageViewShouldBeInitialized() {
     let loader = DefaultAnimator(revealStyle: .Fade, reportProgress: true)
     imageView.sf_setAnimationLoader(loader)
 }
