@@ -23,6 +23,14 @@ imageView.sf_setImage(#some image url string#)
 ```
 That's it!
 
+##### Cache
+```swift
+var stringCache = Cache<String>(cacheDirectoryPath: cachePath)
+stringCache.write(key, value: value)
+
+let cachedString = stringCache.fetch(key)
+```
+
 
 ##### GIF image support
 ![](demo_gif.gif)
