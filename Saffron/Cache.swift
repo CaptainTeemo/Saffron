@@ -126,6 +126,7 @@ public struct Cache<T: DataConvertible where T.Result == T> {
      */
     public func fetch(queryKey: String, skipMemoryQuery: Bool = false) -> T? {
         let key = removeSlash(queryKey)
+        
         let cachePath = self.cachePath(key)
         
         if !skipMemoryQuery {

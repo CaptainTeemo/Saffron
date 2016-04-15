@@ -173,7 +173,6 @@ private class DownloadOperation: NSOperation {
 }
 
 extension DownloadOperation: NSURLSessionDownloadDelegate {
-    
     @objc func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
         
         if cancelled {
