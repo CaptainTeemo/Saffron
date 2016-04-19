@@ -50,6 +50,8 @@ public enum RevealStyle {
 public class DefaultAnimator: UIView {
     private let loaderLayer = CAShapeLayer()
     
+    private var _progressBackgroundLayer: CAShapeLayer?
+    
     private let diameter: CGFloat = 50
     
     private var _reportProgress = false
@@ -71,10 +73,26 @@ public class DefaultAnimator: UIView {
      */
     public init(loaderColor: UIColor = UIColor.redColor(), revealStyle: RevealStyle, reportProgress: Bool) {
         super.init(frame: CGRectZero)
+        
         commonInit()
+
         _reportProgress = reportProgress
         _revealStyle = revealStyle
         loaderLayer.strokeColor = loaderColor.CGColor
+        
+        if reportProgress {
+            let progressBackgroundLayer = CAShapeLayer()
+            progressBackgroundLayer.lineWidth = _lineWidth
+            progressBackgroundLayer.fillColor = nil
+            
+            var red: CGFloat = 0, blue: CGFloat = 0, green: CGFloat = 0, alpha: CGFloat = 0
+            loaderColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+            progressBackgroundLayer.strokeColor = UIColor(red: red, green: green, blue: blue, alpha: alpha / 4).CGColor
+            
+            layer.addSublayer(progressBackgroundLayer)
+            
+            _progressBackgroundLayer = progressBackgroundLayer
+        }
     }
     
     override init(frame: CGRect) {
@@ -108,12 +126,19 @@ public class DefaultAnimator: UIView {
             height: diameter
         )
         
-        let path = UIBezierPath(ovalInRect: loaderLayer.bounds)
+        let path = UIBezierPath(arcCenter: CGPoint(x: loaderLayer.frame.width / 2, y: loaderLayer.frame.height / 2), radius: diameter / 2, startAngle: -CGFloat(M_PI_2), endAngle: CGFloat(3 * M_PI_2), clockwise: true)
         loaderLayer.path = path.CGPath
+        
+        _progressBackgroundLayer?.frame = loaderLayer.frame
+        
+        if let _ = _progressBackgroundLayer {
+            let bgPath = UIBezierPath(ovalInRect: loaderLayer.bounds)
+            _progressBackgroundLayer?.path = bgPath.CGPath
+        }
     }
     
     private func addAnimation() {
-        
+        loaderLayer.strokeStart = 0
         loaderLayer.strokeEnd = 1
         
         let rotation = CABasicAnimation(keyPath: "transform.rotation")
