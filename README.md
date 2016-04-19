@@ -26,8 +26,10 @@ That's all!
 ##### Cache
 ```swift
 var stringCache = Cache<String>(cacheDirectoryPath: cachePath)
+// write to cache
 stringCache.write(key, value: value)
 
+// fetch from cache
 let cachedString = stringCache.fetch(key)
 ```
 
