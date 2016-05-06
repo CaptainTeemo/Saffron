@@ -14,6 +14,7 @@ Saffron is a framework that gives a helping hand to download images and manage c
 * Generic Cache struct that can cache everything.
 * Convenient extensions for UIImageView that do download and cache things for you.
 * Built in loading animator which can be configured.
+* Options to process image (corner radius, scale and GaussianBlur).
 * GIF image support.
 * Easy to use.
 
@@ -22,6 +23,12 @@ Saffron is a framework that gives a helping hand to download images and manage c
 imageView.sf_setImage(#some image url string#)
 ```
 That's all!
+
+**Process image**
+```swift
+imageView.sf_setImage(url, options: [.ScaleToFill(size), .CornerRadius(8), .GaussianBlur(10))
+// image would be processed in order and assign the result image to imageView.
+```
 
 ##### Cache
 ```swift
