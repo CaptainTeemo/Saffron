@@ -12,6 +12,8 @@ import XCTest
 class ImageTests: XCTestCase {
     
     let testUrl = "http://lovelace-media.imgix.net/uploads/249/3d37a870-3116-0132-0982-0eae5eefacd9.gif"
+    let path = NSBundle(forClass: self.dynamicType).pathForResource("Teemo", ofType: "jpg")
+    let image = UIImage(contentsOfFile: path!)
 
     override func setUp() {
         super.setUp()
@@ -56,8 +58,7 @@ class ImageTests: XCTestCase {
     }
     
     func testMemoryWarning() {
-        let path = NSBundle(forClass: self.dynamicType).pathForResource("Teemo", ofType: "jpg")
-        let image = UIImage(contentsOfFile: path!)
+
         let testKey = "testKey"
         ImageManager.sharedManager().write(testKey, image: image)
         
@@ -66,6 +67,22 @@ class ImageTests: XCTestCase {
         NSNotificationCenter.defaultCenter().postNotificationName(UIApplicationDidReceiveMemoryWarningNotification, object: nil)
         
         XCTAssertNil(ImageManager.sharedManager().fetchMemory(testKey))
+    }
+    
+    func testGaussianBlur() {
+        
+    }
+    
+    func testCornerRadius() {
+        
+    }
+    
+    func testScale() {
+        
+    }
+    
+    func testBatchOptions() {
+        
     }
 }
 

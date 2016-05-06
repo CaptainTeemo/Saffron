@@ -25,12 +25,12 @@ private enum Constants {
 }
 
 private class CacheEntry: NSObject {
-    private var _value: Any?
-    private var _creationTime: NSDate
+    var value: Any?
+    var creationTime: NSDate
     
     required init<T: DataConvertible>(value: T?, creationTime: NSDate = NSDate()) {
-        _value = value
-        _creationTime = creationTime
+        self.value = value
+        self.creationTime = creationTime
     }
 }
 
@@ -79,8 +79,15 @@ public struct Cache<T: DataConvertible where T.Result == T> {
         return self._cacheDirectoryPath
     }()
     
-    // MARK: Init with a cache path.
+    // MARK: Init
     
+    /**
+     Init with a cache path.
+     
+     - parameter cacheDirectoryPath: Cache path.
+     
+     - returns: Instance of cache.
+     */
     public init(cacheDirectoryPath: String) {
         _cacheDirectoryPath = cacheDirectoryPath
     }
@@ -117,48 +124,46 @@ public struct Cache<T: DataConvertible where T.Result == T> {
     }
     
     /**
-     Fetch value from cache. First search in memory cache, if not hit then fetch from disk, or return nil.
+     Fetch value from cache. First search in memory cache, if not hit then fetch from disk.
      
-     - parameter queryKey:   Key.
-     - parameter fromMemory: Query from memory first or not.
-     
-     - returns: Cached value.
+     - parameter queryKey:        Key.
+     - parameter skipMemoryQuery: Query from memory first or not.
+     - parameter done:            Callback when done.
      */
-    public func fetch(queryKey: String, skipMemoryQuery: Bool = false) -> T? {
-        let key = removeSlash(queryKey)
+    public func fetch(queryKey: String, skipMemoryQuery: Bool = false, done: (T?) -> Void) {
+        
+        let key = self.removeSlash(queryKey)
         
         let cachePath = self.cachePath(key)
         
         if !skipMemoryQuery {
-            if let cacheEntry = _memoryCache.objectForKey(key) as? CacheEntry {
-                if NSDate().timeIntervalSinceDate(cacheEntry._creationTime) > maxAge {
-                    evictObject(key)
-                    return nil
+            if let cacheEntry = self._memoryCache.objectForKey(key) as? CacheEntry {
+                if NSDate().timeIntervalSinceDate(cacheEntry.creationTime) > self.maxAge {
+                    self.evictObject(key)
                 }
                 
-                dispatch_async(_diskCacheQueue, {
+                dispatch_async(self._diskCacheQueue, {
                     self.updateModificationDate(cachePath)
                 })
-                
-                return cacheEntry._value as? T
+                dispatchOnMain({ 
+                    done(cacheEntry.value as? T)
+                })
+                return
             }
         }
         
-        var value: T?
-        
-        dispatch_sync(_diskCacheQueue) {
+        dispatch_sync(self._diskCacheQueue) {
             let modificationDate = self.modificationDate(cachePath)
             if NSDate().timeIntervalSinceDate(modificationDate) > self.maxAge {
                 self.evictObject(key)
-                return
             }
             
-            value = self.fileContents(cachePath)
-                        
+            let value = self.fileContents(cachePath)
             self._memoryCache.setObject(CacheEntry(value: value, creationTime: modificationDate), forKey: key)
+            dispatchOnMain({ 
+                done(value)
+            })
         }
-        
-        return value
     }
     
     /**
@@ -265,33 +270,30 @@ public struct Cache<T: DataConvertible where T.Result == T> {
             _lastDiskCacheSize = 0
             _lastDiskCacheAttributes = [[String: AnyObject]]()
             
-            if let enumerator = _fileManager.enumeratorAtPath(_cacheDirectoryPath) {
-                while let path = enumerator.nextObject() as? String {
-                    enumerator.skipDescendants()
-                    
-                    if let attributes = enumerator.fileAttributes,
-                        let size = attributes[NSFileSize] as? NSNumber {
-                        _lastDiskCacheSize += size.longLongValue
-                        
-                        let modDate = attributes[NSFileModificationDate] as! NSDate
-                        
-                        let entry: [String: AnyObject] = [Constants.DiskCachePathKey: path,
-                                                          NSFileModificationDate: modDate,
-                                                          NSFileSize: NSNumber(longLong: size.longLongValue)]
-                        
-                        if var lastAttributes = _lastDiskCacheAttributes {
-                            let array = lastAttributes as NSArray
-                            let insertionIndex = array.indexOfObject(entry, inSortedRange: NSMakeRange(0, lastAttributes.count), options: .InsertionIndex, usingComparator: { (value1, value2) -> NSComparisonResult in
-                                let date1 = (value1 as! [String: AnyObject])[NSFileModificationDate] as! NSDate
-                                let date2 = (value2 as! [String: AnyObject])[NSFileModificationDate] as! NSDate
-                                return date1.compare(date2)
-                            })
-                            
-                            lastAttributes.insert(entry, atIndex: insertionIndex)
-                            _lastDiskCacheAttributes = lastAttributes
-                        }
-                    }
-                }
+            guard let enumerator = _fileManager.enumeratorAtPath(_cacheDirectoryPath) else { return }
+            while let path = enumerator.nextObject() as? String {
+                enumerator.skipDescendants()
+                
+                guard let attributes = enumerator.fileAttributes,
+                    let size = attributes[NSFileSize] as? NSNumber else { return }
+                _lastDiskCacheSize += size.longLongValue
+                
+                let modDate = attributes[NSFileModificationDate] as! NSDate
+                
+                let entry: [String: AnyObject] = [Constants.DiskCachePathKey: path,
+                                                  NSFileModificationDate: modDate,
+                                                  NSFileSize: NSNumber(longLong: size.longLongValue)]
+                
+                guard var lastAttributes = _lastDiskCacheAttributes else { return }
+                let array = lastAttributes as NSArray
+                let insertionIndex = array.indexOfObject(entry, inSortedRange: NSMakeRange(0, lastAttributes.count), options: .InsertionIndex, usingComparator: { (value1, value2) -> NSComparisonResult in
+                    let date1 = (value1 as! [String: AnyObject])[NSFileModificationDate] as! NSDate
+                    let date2 = (value2 as! [String: AnyObject])[NSFileModificationDate] as! NSDate
+                    return date1.compare(date2)
+                })
+                
+                lastAttributes.insert(entry, atIndex: insertionIndex)
+                _lastDiskCacheAttributes = lastAttributes
             }
         } catch let error as NSError {
             debugPrint("\(#function): \(error)")
@@ -306,20 +308,19 @@ public struct Cache<T: DataConvertible where T.Result == T> {
         guard var attributes = _lastDiskCacheAttributes else { return }
         while Int64(attributes.count) > maxDiskCacheRecords || _lastDiskCacheSize > maxDiskCacheBytes {
             dispatch_barrier_async(_diskBarrierQueue) {
-                if let entry = attributes.first {
-                    let toRemove = entry[Constants.DiskCachePathKey] as! String
-                    let fileSize = entry[NSFileSize] as! NSNumber
-                    do {
-                        try self._fileManager.removeItemAtPath(self.cachePath(toRemove))
-                    } catch let error as NSError {
-                        debugPrint("\(#function): \(error)")
-                    }
-                    
-                    self._lastDiskCacheSize -= fileSize.longLongValue
-                    
-                    attributes.removeFirst()
-                    self._lastDiskCacheAttributes = attributes
+                guard let entry = attributes.first else { return }
+                let toRemove = entry[Constants.DiskCachePathKey] as! String
+                let fileSize = entry[NSFileSize] as! NSNumber
+                do {
+                    try self._fileManager.removeItemAtPath(self.cachePath(toRemove))
+                } catch let error as NSError {
+                    debugPrint("\(#function): \(error)")
                 }
+                
+                self._lastDiskCacheSize -= fileSize.longLongValue
+                
+                attributes.removeFirst()
+                self._lastDiskCacheAttributes = attributes
             }
         }
     }
@@ -332,7 +333,7 @@ extension Cache {
         let cachePath = self.cachePath(key)
         
         if let cacheEntry = _memoryCache.objectForKey(key) as? CacheEntry {
-            if NSDate().timeIntervalSinceDate(cacheEntry._creationTime) > maxAge {
+            if NSDate().timeIntervalSinceDate(cacheEntry.creationTime) > maxAge {
                 evictObject(key)
                 return nil
             }
@@ -341,7 +342,7 @@ extension Cache {
                 self.updateModificationDate(cachePath)
             })
             
-            return cacheEntry._value as? T
+            return cacheEntry.value as? T
         }
         return nil
     }

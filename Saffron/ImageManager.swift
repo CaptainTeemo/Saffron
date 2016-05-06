@@ -39,6 +39,7 @@ public class ImageManager {
     }
     
     private init() {
+        // since NSCache will be automatically purged when receiving memory warning, we might not need it anymore.
         NSNotificationCenter.defaultCenter().addObserverForName(UIApplicationDidReceiveMemoryWarningNotification, object: nil, queue: nil) { (notification) in
             self.purgeMemory()
         }
@@ -56,15 +57,25 @@ public class ImageManager {
     }
     
     /**
-     Fetch image from cache.
+     Fetch image from cache asynchronously.
      
      - parameter key:             Key.
      - parameter skipMemoryQuery: Search in memory first or not.
-     
-     - returns: Cached image or nil.
+     - parameter done:            Callback when done in main thread.
      */
-    func fetch(key: String, skipMemoryQuery: Bool = false) -> UIImage? {
-        return _cache.fetch(key, skipMemoryQuery: skipMemoryQuery)
+    func fetch(key: String, skipMemoryQuery: Bool = false, done: (UIImage?) -> Void) {
+        _cache.fetch(key, skipMemoryQuery: skipMemoryQuery) { (image) in
+            self._queue.addOperationWithBlock({ 
+                var cachedImage = image
+                if image?.gifData == nil {
+                    cachedImage = UIImage.decodeImage(image)
+                }
+                dispatchOnMain({
+                    done(cachedImage)
+                })
+            })
+
+        }
     }
     
     /**
@@ -72,7 +83,7 @@ public class ImageManager {
      
      - parameter url:  Image url.
      - parameter progress: Report downloading progress.
-     - parameter done: Callback closure.
+     - parameter done: Callback when done in main thread.
      */
     public func downloadImage(url: String, progress: ((Int64, Int64) -> Void)? = nil, done: (UIImage?, NSError?) -> Void) -> NSOperation {
         let downloadOperation = DownloadOperation(url: url, queue: _queue)
@@ -86,7 +97,7 @@ public class ImageManager {
                         image = UIImage.animatedGIF(d)
                         image?.gifData = d
                     } else {
-                        image = UIImage(data: d)
+                        image = UIImage.decodeImage(UIImage(data: d))
                     }
                 } else {
                     error = NSError(domain: ErrorDomain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Donwload failed"])

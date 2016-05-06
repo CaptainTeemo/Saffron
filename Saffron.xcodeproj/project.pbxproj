@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CF99679C1CD8999D00206629 /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF99679B1CD8999D00206629 /* Option.swift */; };
+		CF99679E1CD89BD000206629 /* ImageProcesser.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF99679D1CD89BD000206629 /* ImageProcesser.swift */; };
 		CFFA749A1CBE2A82004D1FD9 /* Saffron.h in Headers */ = {isa = PBXBuildFile; fileRef = CFFA74991CBE2A82004D1FD9 /* Saffron.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFFA74A11CBE2A82004D1FD9 /* Saffron.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFFA74961CBE2A82004D1FD9 /* Saffron.framework */; };
 		CFFA74B61CBE2AA4004D1FD9 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA74B01CBE2AA4004D1FD9 /* Cache.swift */; };
@@ -31,6 +33,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CF99679B1CD8999D00206629 /* Option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
+		CF99679D1CD89BD000206629 /* ImageProcesser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProcesser.swift; sourceTree = "<group>"; };
 		CFFA74961CBE2A82004D1FD9 /* Saffron.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Saffron.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFFA74991CBE2A82004D1FD9 /* Saffron.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Saffron.h; sourceTree = "<group>"; };
 		CFFA749B1CBE2A82004D1FD9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -93,6 +97,8 @@
 				CFFA74B31CBE2AA4004D1FD9 /* ImageManager.swift */,
 				CFFA74B41CBE2AA4004D1FD9 /* LoadingAnimator.swift */,
 				CFFA74B51CBE2AA4004D1FD9 /* UIImageViewExtension.swift */,
+				CF99679B1CD8999D00206629 /* Option.swift */,
+				CF99679D1CD89BD000206629 /* ImageProcesser.swift */,
 				CFFA74991CBE2A82004D1FD9 /* Saffron.h */,
 				CFFA749B1CBE2A82004D1FD9 /* Info.plist */,
 			);
@@ -224,7 +230,9 @@
 				CFFA74BB1CBE2AA4004D1FD9 /* UIImageViewExtension.swift in Sources */,
 				CFFA74BA1CBE2AA4004D1FD9 /* LoadingAnimator.swift in Sources */,
 				CFFA74B71CBE2AA4004D1FD9 /* DataConvertible.swift in Sources */,
+				CF99679E1CD89BD000206629 /* ImageProcesser.swift in Sources */,
 				CFFA74B91CBE2AA4004D1FD9 /* ImageManager.swift in Sources */,
+				CF99679C1CD8999D00206629 /* Option.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,6 +421,7 @@
 				CFFA74AC1CBE2A82004D1FD9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CFFA74AD1CBE2A82004D1FD9 /* Build configuration list for PBXNativeTarget "SaffronTests" */ = {
 			isa = XCConfigurationList;
@@ -421,6 +430,7 @@
 				CFFA74AF1CBE2A82004D1FD9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

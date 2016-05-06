@@ -55,6 +55,7 @@ extension UIImage: DataConvertible {
     
     public static func fromData(data: NSData) -> Result? {
         if let image = self.animatedGIF(data) {
+            image.gifData = data
             return image
         } else {
             return self.init(data: data)

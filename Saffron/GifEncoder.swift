@@ -25,7 +25,14 @@ extension UIImage {
         }
     }
     
-    class func animatedGIF(data: NSData) -> UIImage? {
+    /**
+     Encode gif image with data.
+     
+     - parameter data: Image data.
+     
+     - returns: Animated UIImage.
+     */
+    public class func animatedGIF(data: NSData) -> UIImage? {
         guard let source = CGImageSourceCreateWithData(data, nil) else {
             return nil
         }
@@ -151,19 +158,19 @@ extension UIImage {
             }
         }
         
-        let animation = UIImage.animatedImageWithImages(frames,
-                                                        duration: Double(duration) / 1000.0)
+        let animation = UIImage.animatedImageWithImages(frames, duration: Double(duration) / 1000.0)
         
         return animation
     }
     
-    private class func decodeImage(image: UIImage) -> UIImage? {
+    class func decodeImage(image: UIImage?) -> UIImage? {
+        guard let image = image else { return nil }
         let imageRef = image.CGImage
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         
         let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue | CGBitmapInfo.ByteOrder32Little.rawValue)
         
-        guard let context = CGBitmapContextCreate(nil, CGImageGetWidth(imageRef), CGImageGetWidth(imageRef), 8, CGImageGetWidth(imageRef) * 4, colorSpace, bitmapInfo.rawValue) else { return nil }
+        guard let context = CGBitmapContextCreate(nil, CGImageGetWidth(imageRef), CGImageGetHeight(imageRef), 8, CGImageGetWidth(imageRef) * 4, colorSpace, bitmapInfo.rawValue) else { return nil }
         let rect = CGRect(origin: CGPointZero, size: CGSize(width: CGImageGetWidth(imageRef), height: CGImageGetHeight(imageRef)))
         CGContextDrawImage(context, rect, imageRef)
         

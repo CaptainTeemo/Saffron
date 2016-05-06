@@ -9,52 +9,52 @@
 import Foundation
 
 public extension UIImageView {
-    
     /**
      Set image with url.
      
      - parameter url:         Image url.
      - parameter placeholder: Placeholder image.
-     - parameter done:        Callback closure.
+     - parameter options:     Process image, see `Option`
+     - parameter done:        Callback when done.
      */
-    public func sf_setImage(url: String, placeholder: UIImage? = nil, done: ((UIImage?, NSError?) -> Void)? = nil) {
-        // loadingAnimator should not be nil, so we explictly unwrap it.
-        if _loadingAnimator == nil {
-            let animator = DefaultAnimator(revealStyle: .Circle, reportProgress: false)
-            sf_setAnimationLoader(animator)
-        }
-        
+    public func sf_setImage(url: String, placeholder: UIImage? = nil, options: [Option]? = nil, done: ((UIImage?, NSError?) -> Void)? = nil) {
+                
         sf_cancelDownload()
-
-        image = _placeholder
         
-        if let cachedImage = ImageManager.sharedManager().fetch(url) {
-            image = cachedImage
-            _loadingAnimator!.removeAnimation()
-            done?(cachedImage, nil)
-        } else {
-            startLoadingAnimation()
-            
-            let task = ImageManager.sharedManager().downloadImage(
-                url,
-                progress: { [weak self] (received, total) in
-                    self?._loadingAnimator!.progress?(received, total)
-                },
-                done: { [weak self] (image, error) in
-                    self?._operations?.removeValueForKey(url)
-                    if let downloadedImage = image {
-                        self?.image = downloadedImage
-                        ImageManager.sharedManager().write(url, image: downloadedImage)
-                        self?.removeLoadingAnimation()
-                    }
-                    
-                    done?(image, error)
-            })
-            
-            if _operations == nil {
-                _operations = [String: NSOperation]()
+        self.image = _placeholder
+        
+        ImageManager.sharedManager().fetch(url) { (image) in
+            if let cachedImage = image {
+                Option.batch(cachedImage, options: options, done: { (resultImage) in
+                    self.image = resultImage
+                    self._loadingAnimator?.removeAnimation()
+                    done?(resultImage, nil)
+                })
+            } else {
+                self.startLoadingAnimation()
+                
+                let task = ImageManager.sharedManager().downloadImage(
+                    url,
+                    progress: { (received, total) in
+                        self._loadingAnimator?.progress?(received, total)
+                    },
+                    done: { (image, error) in
+                        self._operations?.removeValueForKey(url)
+                        if let downloadedImage = image {
+                            Option.batch(downloadedImage, options: options, done: { (resultImage) in
+                                self.image = resultImage
+                            })
+                            ImageManager.sharedManager().write(url, image: downloadedImage)
+                            self.removeLoadingAnimation()
+                        }
+                        done?(image, error)
+                })
+                
+                if self._operations == nil {
+                    self._operations = [String: NSOperation]()
+                }
+                self._operations![url] = task
             }
-            _operations?[url] = task
         }
     }
     
@@ -70,7 +70,7 @@ public extension UIImageView {
      
      - parameter loaderView: Custom loader view, it must conform protocol `LoadingAnimator`.
      */
-    public func sf_setAnimationLoader<T: UIView where T: LoadingAnimator>(loaderView: T) {        
+    public func sf_setAnimationLoader<T: UIView where T: LoadingAnimator>(loaderView: T) {
         for subview in subviews {
             if subview is LoadingAnimator {
                 subview.removeFromSuperview()
@@ -154,11 +154,11 @@ private extension UIImageView {
     }
     
     private func startLoadingAnimation() {
-        _loadingAnimator!.startAnimation()
+        _loadingAnimator?.startAnimation()
     }
     
     private func removeLoadingAnimation() {
-        _loadingAnimator!.removeAnimation()
-        _loadingAnimator!.reveal?()
+        _loadingAnimator?.removeAnimation()
+        _loadingAnimator?.reveal?()
     }
 }
