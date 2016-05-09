@@ -12,12 +12,6 @@ import XCTest
 class ImageTests: XCTestCase {
     
     let testUrl = "http://lovelace-media.imgix.net/uploads/249/3d37a870-3116-0132-0982-0eae5eefacd9.gif"
-    
-    lazy var image: UIImage? = {
-        let path = NSBundle(forClass: self.dynamicType).pathForResource("Teemo", ofType: "jpg")
-        let image = UIImage(contentsOfFile: path!)
-        return image
-    }()
 
     override func setUp() {
         super.setUp()
@@ -27,6 +21,12 @@ class ImageTests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
+    }
+    
+    func loadImage() -> UIImage? {
+        let path = NSBundle(forClass: self.dynamicType).pathForResource("Teemo", ofType: "jpg")
+        let image = UIImage(contentsOfFile: path!)
+        return image
     }
 
     func testImageDownloadAndCache() {
@@ -62,7 +62,7 @@ class ImageTests: XCTestCase {
     }
     
     func testMemoryWarning() {
-
+        let image = loadImage()
         let testKey = "testKey"
         ImageManager.sharedManager().write(testKey, image: image)
         
@@ -74,27 +74,30 @@ class ImageTests: XCTestCase {
     }
     
     func testGaussianBlur() {
+        let image = loadImage()
         let output = image?.blur(5)
         XCTAssertNotNil(output)
     }
     
     func testCornerRadius() {
+        let image = loadImage()
         let output = image?.roundCorner(4)
         XCTAssertNotNil(output)
     }
     
     func testScale() {
+        let image = loadImage()
         let output = image?.scaleToFill(CGSize(width: 100, height: 100))
         XCTAssertNotNil(output)
     }
     
     func testBatchOptions() {
+        let image = loadImage()
         let expectation = self.expectationWithDescription("batch")
         Option.batch(image, options: [.GaussianBlur(5), .CornerRadius(8), .ScaleToFill(CGSize(width: 100, height: 100))]) { output in
             expectation.fulfill()
             XCTAssertNotNil(output)
         }
-        
         self.waitForExpectationsWithTimeout(10, handler: nil)
     }
 }
