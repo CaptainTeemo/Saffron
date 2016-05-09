@@ -11,7 +11,7 @@ import Foundation
 private let processQueue = dispatch_queue_create("com.teemo.suffron.options", DISPATCH_QUEUE_CONCURRENT)
 
 /**
- Options to process image.
+ Options to edit image.
  
  - GaussianBlur: Blur effect.
  - CornerRadius: Round corner.
@@ -44,6 +44,7 @@ public enum Option {
     
     /**
      Perform batch operations, in order.
+     Note: Animated UIImage would not be processed for now.
      
      - parameter image:   Input image.
      - parameter options: Things to deal with image.
@@ -52,6 +53,12 @@ public enum Option {
     public static func batch(image: UIImage?, options: [Option]?, done: (UIImage?) -> Void) {
         guard let options = options else {
             dispatchOnMain({ 
+                done(image)
+            })
+            return
+        }
+        guard image?.gifData == nil else {
+            dispatchOnMain({
                 done(image)
             })
             return

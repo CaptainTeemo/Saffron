@@ -14,7 +14,7 @@ public extension UIImageView {
      
      - parameter url:         Image url.
      - parameter placeholder: Placeholder image.
-     - parameter options:     Process image, see `Option`
+     - parameter options:     Options to edit image, see `Option`.
      - parameter done:        Callback when done.
      */
     public func sf_setImage(url: String, placeholder: UIImage? = nil, options: [Option]? = nil, done: ((UIImage?, NSError?) -> Void)? = nil) {

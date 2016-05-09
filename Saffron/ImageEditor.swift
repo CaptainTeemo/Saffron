@@ -1,5 +1,5 @@
 //
-//  UIImage+Filter.swift
+//  ImageEditor.swift
 //  Saffron
 //
 //  Created by CaptainTeemo on 5/3/16.
