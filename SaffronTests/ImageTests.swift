@@ -96,5 +96,15 @@ class ImageTests: XCTestCase {
         }
         self.waitForExpectationsWithTimeout(30, handler: nil)
     }
+    
+    func testImageView() {
+        let expectation = self.expectationWithDescription("imageView")
+        let imageView = UIImageView()
+        imageView.sf_setImage(testUrl) { (image, error) in
+            imageView.sf_setImage(self.testUrl)
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(30, handler: nil)
+    }
 }
 
