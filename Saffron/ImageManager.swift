@@ -125,9 +125,15 @@ public class ImageManager {
         let group = dispatch_group_create()
         for url in urls {
             dispatch_group_enter(group)
-            downloadImage(url, done: { (image, error) in
-                self._cache.write(url, value: image, done: { (finished) in
+            self._cache.fetch(url, done: { (image) in
+                guard let _ = image else {
                     dispatch_group_leave(group)
+                    return
+                }
+                self.downloadImage(url, done: { (image, error) in
+                    self._cache.write(url, value: image, done: { (finished) in
+                        dispatch_group_leave(group)
+                    })
                 })
             })
         }
