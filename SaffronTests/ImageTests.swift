@@ -106,5 +106,41 @@ class ImageTests: XCTestCase {
         }
         self.waitForExpectationsWithTimeout(30, handler: nil)
     }
+    
+    func testBatchDownload() {
+        let expectation = self.expectationWithDescription("batch download")
+
+        let imageUrls = [
+            "http://image.tianjimedia.com/uploadImages/2012/159/2YUO85971OV7_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/40S2O6S02ARH_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/GVK0IPD7MBO8_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/QL0J6027D4NN_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/9WYG9965EY9F_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/Q4PP87Q971GF_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/63WMF5LPVNBU_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/GY0588VFBGA9_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/U59ST295UVB6_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/LT4W8QEM549Z_1000x500.png",
+            "http://image.tianjimedia.com/uploadImages/2012/159/7UXA6QR4G530_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/I6F1ST30D8BI_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/R87D0COR9L0K_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/YDLL743A63F2_1000x500.png",
+            "http://image.tianjimedia.com/uploadImages/2012/159/VQ7Z1734AZ91_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/QVS16CHJI219_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/2SX444451436_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/I7CT36OLPIKQ_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/980O9402WSQ2_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/5927C3PW85UZ_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/1FF1ESH41RK2_1000x500.jpg",
+            "http://image.tianjimedia.com/uploadImages/2012/159/RWS9KRJ03N1X_1000x500.jpg"
+        ]
+        
+        ImageManager.sharedManager().downloadImages(imageUrls) { (images) in
+            print(images)
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(30, handler: nil)
+    }
 }
 

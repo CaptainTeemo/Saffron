@@ -115,6 +115,36 @@ public class ImageManager {
     }
     
     /**
+     Batch download images.
+     
+     - parameter urls:     Array of url.
+     - parameter done:     Compeletion handler in main thread.
+     */
+    public func downloadImages(urls: [String], done: ([UIImage?]) -> Void) {
+        var images = [UIImage?]()
+        let group = dispatch_group_create()
+        for url in urls {
+            dispatch_group_enter(group)
+            downloadImage(url, done: { (image, error) in
+                self._cache.write(url, value: image, done: { (finished) in
+                    dispatch_group_leave(group)
+                })
+            })
+        }
+        
+        dispatch_group_notify(group, dispatch_get_main_queue()) { 
+            for url in urls {
+                self._cache.fetch(url, done: { (image) in
+                    images.append(image)
+                    if images.count == urls.count {
+                        done(images)
+                    }
+                })
+            }
+        }
+    }
+    
+    /**
      Clear memory cache.
      */
     public func purgeMemory() {
