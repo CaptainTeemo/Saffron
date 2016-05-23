@@ -145,6 +145,13 @@ public class ImageManager {
     }
     
     /**
+     Cancel downoading operations.
+     */
+    public func cancelAllOperations() {
+        _queue.cancelAllOperations()
+    }
+    
+    /**
      Clear memory cache.
      */
     public func purgeMemory() {
