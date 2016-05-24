@@ -11,7 +11,7 @@ import XCTest
 
 class ImageTests: XCTestCase {
     
-    let testUrl = "http://lovelace-media.imgix.net/uploads/249/3d37a870-3116-0132-0982-0eae5eefacd9.gif"
+    let testUrl = "http://screenrant.com/wp-content/uploads/Iron-Man-Robert-Downey-Jr-Interview.jpg"
     
     lazy var image: UIImage? = {
         let path = NSBundle(forClass: self.dynamicType).pathForResource("Teemo", ofType: "jpg")
@@ -139,6 +139,20 @@ class ImageTests: XCTestCase {
         ImageManager.sharedManager().downloadImages(imageUrls) { (images) in
             print(images)
             expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(30, handler: nil)
+    }
+    
+    func testDownloadRestpectCache() {
+        let expectation = self.expectationWithDescription("cache download")
+
+        ImageManager.sharedManager().downloadImageRespectCache(testUrl) { (image, error) in
+            print(image)
+            print(error)
+            ImageManager.sharedManager().downloadImageRespectCache(self.testUrl, done: { (image, error) in
+                expectation.fulfill()
+            })
         }
         
         self.waitForExpectationsWithTimeout(30, handler: nil)

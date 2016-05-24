@@ -149,6 +149,31 @@ public class ImageManager {
     }
     
     /**
+     Download image but first look up in cache.
+     
+     - parameter url:  Key.
+     - parameter done: Callback when done in main thread.
+     */
+    public func downloadImageRespectCache(url: String, done: (UIImage?, NSError?) -> Void) {
+        _cache.fetch(url) { (image) in
+            if let cachedImage = image {
+                dispatchOnMain({ 
+                    done(cachedImage, nil)
+                })
+            } else {
+                self.downloadImage(url, done: { (downloadedImage, error) in
+                    guard let d = downloadedImage else { done(nil, error); return }
+                    self._cache.write(url, value: d, done: { (finished) in
+                        dispatchOnMain({ 
+                            done(d, error)
+                        })
+                    })
+                })
+            }
+        }
+    }
+    
+    /**
      Cancel downoading operations.
      */
     public func cancelAllOperations() {
