@@ -123,13 +123,11 @@ public class ImageManager {
     public func downloadImages(urls: [String], done: ([UIImage?]) -> Void) {
         var images = [UIImage?]()
         let group = dispatch_group_create()
+        
         for url in urls {
             dispatch_group_enter(group)
             self._cache.fetch(url, done: { (image) in
-                guard let _ = image else {
-                    dispatch_group_leave(group)
-                    return
-                }
+                guard image == nil else { dispatch_group_leave(group); return }
                 self.downloadImage(url, done: { (image, error) in
                     self._cache.write(url, value: image, done: { (finished) in
                         dispatch_group_leave(group)
@@ -214,7 +212,8 @@ private class DownloadOperation: NSOperation {
         
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
         let session = NSURLSession(configuration: config, delegate: self, delegateQueue: self._queue)
-        let task = session.downloadTaskWithURL(NSURL(string: _url)!)
+        let request = NSURLRequest(URL: NSURL(string: _url)!, cachePolicy: .ReloadRevalidatingCacheData, timeoutInterval: 15)
+        let task = session.downloadTaskWithRequest(request)
         task.resume()
         
         _task = task
@@ -241,6 +240,12 @@ extension DownloadOperation: NSURLSessionDownloadDelegate {
     
     @objc func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         progress?(totalBytesWritten, totalBytesExpectedToWrite)
+    }
+    
+    @objc func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
+        if let _ = error {
+            finished = true
+        }
     }
 }
 

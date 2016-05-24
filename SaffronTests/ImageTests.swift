@@ -132,7 +132,8 @@ class ImageTests: XCTestCase {
             "http://image.tianjimedia.com/uploadImages/2012/159/980O9402WSQ2_1000x500.jpg",
             "http://image.tianjimedia.com/uploadImages/2012/159/5927C3PW85UZ_1000x500.jpg",
             "http://image.tianjimedia.com/uploadImages/2012/159/1FF1ESH41RK2_1000x500.jpg",
-            "http://image.tianjimedia.com/uploadImages/2012/159/RWS9KRJ03N1X_1000x500.jpg"
+            "http://image.tianjimedia.com/uploadImages/2012/159/RWS9KRJ03N1X_1000x500.jpg",
+            ""
         ]
         
         ImageManager.sharedManager().downloadImages(imageUrls) { (images) in
