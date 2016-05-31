@@ -35,6 +35,20 @@ private class CacheEntry: NSObject {
 }
 
 /**
+ Custom query policy.
+ */
+public enum CacheQueryPolicy {
+    /// Query cache from memory and disk.
+    case Normal
+    /// Query cache from memory only.
+    case IgnoreDiskCache
+    /// Query cache from disk only.
+    case IgnoreMemoryCache
+    /// Ignore cache.
+    case IgnoreAllCache
+}
+
+/**
  *  Cache everything which conforms to protocol `DataConvertible`.
  */
 public struct Cache<T: DataConvertible where T.Result == T> {
@@ -127,10 +141,24 @@ public struct Cache<T: DataConvertible where T.Result == T> {
      Fetch value from cache. First search in memory cache, if not hit then fetch from disk.
      
      - parameter queryKey:        Key.
-     - parameter skipMemoryQuery: Query from memory first or not.
+     - parameter queryPolicy:     Query policy, see `CacheQueryPolicy`.
      - parameter done:            Callback when done.
      */
-    public func fetch(queryKey: String, skipMemoryQuery: Bool = false, done: (T?) -> Void) {
+    public func fetch(queryKey: String, queryPolicy: CacheQueryPolicy = .Normal, done: (T?) -> Void) {
+        var skipMemoryQuery = false
+        var skipDiskQuery = false
+        
+        switch queryPolicy {
+        case .IgnoreDiskCache:
+            skipDiskQuery = true
+        case .IgnoreMemoryCache:
+            skipMemoryQuery = true
+        case .IgnoreAllCache:
+            skipMemoryQuery = true
+            skipDiskQuery = true
+        default:
+            break
+        }
         
         let key = self.removeSlash(queryKey)
         
@@ -150,6 +178,11 @@ public struct Cache<T: DataConvertible where T.Result == T> {
                 })
                 return
             }
+        }
+        
+        if skipDiskQuery {
+            done(nil)
+            return
         }
         
         dispatch_sync(self._diskCacheQueue) {

@@ -60,11 +60,11 @@ public class ImageManager {
      Fetch image from cache asynchronously.
      
      - parameter key:             Key.
-     - parameter skipMemoryQuery: Search in memory first or not.
+     - parameter queryPolicy:     Query policy, see `CacheQueryPolicy`.
      - parameter done:            Callback when done in main thread.
      */
-    func fetch(key: String, skipMemoryQuery: Bool = false, done: (UIImage?) -> Void) {
-        _cache.fetch(key, skipMemoryQuery: skipMemoryQuery) { (image) in
+    func fetch(key: String, queryPolicy: CacheQueryPolicy = .Normal, done: (UIImage?) -> Void) {
+        _cache.fetch(key, queryPolicy: queryPolicy) { (image) in
             self._queue.addOperationWithBlock({ 
                 var cachedImage = image
                 if image?.gifData == nil {

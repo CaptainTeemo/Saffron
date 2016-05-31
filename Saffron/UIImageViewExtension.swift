@@ -14,16 +14,17 @@ public extension UIImageView {
      
      - parameter url:         Image url.
      - parameter placeholder: Placeholder image.
+     - parameter queryPolicy: Query policy, see `CacheQueryPolicy`.
      - parameter options:     Options to edit image, see `Option`.
      - parameter done:        Callback when done.
      */
-    public func sf_setImage(url: String, placeholder: UIImage? = nil, options: [Option]? = nil, done: ((UIImage?, NSError?) -> Void)? = nil) {
+    public func sf_setImage(url: String, placeholder: UIImage? = nil, queryPolicy: CacheQueryPolicy = .Normal, options: [Option]? = nil, done: ((UIImage?, NSError?) -> Void)? = nil) {
                 
         sf_cancelDownload()
         
         self.image = _placeholder
         
-        ImageManager.sharedManager().fetch(url) { (image) in
+        ImageManager.sharedManager().fetch(url, queryPolicy: queryPolicy) { (image) in
             if let cachedImage = image {
                 Option.batch(cachedImage, options: options, done: { (resultImage) in
                     self.image = resultImage

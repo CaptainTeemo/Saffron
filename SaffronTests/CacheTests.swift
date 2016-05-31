@@ -139,4 +139,5 @@ class CacheTests: XCTestCase {
         
         self.waitForExpectationsWithTimeout(15, handler: nil)
     }
+    
 }

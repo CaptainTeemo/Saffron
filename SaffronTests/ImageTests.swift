@@ -157,5 +157,16 @@ class ImageTests: XCTestCase {
         
         self.waitForExpectationsWithTimeout(30, handler: nil)
     }
+    
+    func testCacheQueryPolicy() {
+        let expectation = self.expectationWithDescription("query policy")
+        let imageView = UIImageView()
+        imageView.sf_setImage(testUrl) { (image, error) in
+            imageView.sf_setImage(self.testUrl, queryPolicy: .IgnoreAllCache, done: { (image, error) in
+                expectation.fulfill()
+            })
+        }
+        self.waitForExpectationsWithTimeout(30, handler: nil)
+    }
 }
 
