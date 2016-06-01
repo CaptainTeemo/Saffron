@@ -86,6 +86,22 @@ extension UIImage {
         return output
     }
     
+    func oval() -> UIImage? {
+        let rect = CGRect(origin: CGPointZero, size: size)
+        
+        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.mainScreen().scale)
+        let context = UIGraphicsGetCurrentContext()
+        let path = UIBezierPath(ovalInRect: rect)
+        CGContextAddPath(context, path.CGPath)
+        CGContextClip(context)
+        drawInRect(rect)
+        
+        let output = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return output
+    }
+    
     func scaleToFill(targetSize: CGSize) -> UIImage {
         let targetAspect = targetSize.width / targetSize.height
         let aspect = size.width / size.height

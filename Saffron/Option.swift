@@ -16,6 +16,7 @@ private let processQueue = dispatch_queue_create("com.teemo.suffron.options", DI
  - GaussianBlur: Blur effect.
  - CornerRadius: Round corner.
  - ScaleToFill:  Crop image to fit container size.
+ - Oval: Crop image to oval.
  */
 public enum Option {
     /**
@@ -30,6 +31,10 @@ public enum Option {
      Scale to fill container.
      */
     case ScaleToFill(CGSize)
+    /**
+     Crop image to oval.
+     */
+    case Oval
     
     private func handle(image: UIImage?, done: (UIImage?) -> Void) {
         switch self {
@@ -39,6 +44,8 @@ public enum Option {
             done(image?.roundCorner(radius))
         case .ScaleToFill(let size):
             done(image?.scaleToFill(size))
+        case .Oval:
+            done(image?.oval())
         }
     }
     
