@@ -237,7 +237,8 @@ private class DownloadOperation: NSOperation {
         
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
         let session = NSURLSession(configuration: config, delegate: self, delegateQueue: self._queue)
-        let request = NSURLRequest(URL: NSURL(string: _url)!, cachePolicy: .ReloadRevalidatingCacheData, timeoutInterval: 15)
+        let URL = NSURL(string: _url)!
+        let request = NSURLRequest(URL: URL, cachePolicy: .ReloadRevalidatingCacheData, timeoutInterval: 15)
         let task = session.downloadTaskWithRequest(request)
         task.resume()
         

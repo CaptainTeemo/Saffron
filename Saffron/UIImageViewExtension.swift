@@ -19,10 +19,12 @@ public extension UIImageView {
      - parameter done:        Callback when done.
      */
     public func sf_setImage(url: String, placeholder: UIImage? = nil, queryPolicy: CacheQueryPolicy = .Normal, options: [Option]? = nil, done: ((UIImage?, NSError?) -> Void)? = nil) {
-                
+        
+        let url = url.stringByReplacingOccurrencesOfString(" ", withString: "")
+        
         sf_cancelDownload()
         
-        self.image = _placeholder
+        self.image = placeholder
         
         ImageManager.sharedManager().fetch(url, queryPolicy: queryPolicy) { (image) in
             if let cachedImage = image {
@@ -121,20 +123,10 @@ public extension UIImageView {
     }
 }
 
-private var placeholderKey: Void?
 private var animatorKey: Void?
 private var operationKey: Void?
 
 private extension UIImageView {
-    
-    private var _placeholder: UIImage? {
-        set {
-            objc_setAssociatedObject(self, &placeholderKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-        get {
-            return objc_getAssociatedObject(self, &placeholderKey) as? UIImage
-        }
-    }
     
     private var _loadingAnimator: LoadingAnimator? {
         set {
