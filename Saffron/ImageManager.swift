@@ -52,7 +52,7 @@ public class ImageManager {
      - parameter image: Value.
      - parameter done:  Callback.
      */
-    func write(key: String, image: UIImage?, done: ((Bool) -> Void)? = nil) {
+    public func write(key: String, image: UIImage?, done: ((Bool) -> Void)? = nil) {
         _cache.write(key, value: image, done: done)
     }
     
@@ -63,7 +63,7 @@ public class ImageManager {
      - parameter queryPolicy:     Query policy, see `CacheQueryPolicy`.
      - parameter done:            Callback when done in main thread.
      */
-    func fetch(key: String, queryPolicy: CacheQueryPolicy = .Normal, done: (UIImage?) -> Void) {
+    public func fetch(key: String, queryPolicy: CacheQueryPolicy = .Normal, done: (UIImage?) -> Void) {
         _cache.fetch(key, queryPolicy: queryPolicy) { (image) in
             self._queue.addOperationWithBlock({ 
                 var cachedImage = image
