@@ -78,6 +78,7 @@ public class DefaultAnimator: UIView {
      Init
      
      - parameter loaderColor:    Optional loader color. Default is UIColor.redColor()
+     - parameter animatorStyle:  Animator loading style. If it's set to .None reportProgress will be ignored.
      - parameter revealStyle:    Choose your favorite style.
      - parameter reportProgress: If report download progress.
      

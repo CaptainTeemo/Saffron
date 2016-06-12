@@ -14,7 +14,7 @@
     <a title="ImageManager Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html"> Docs</a> (91% documented)</p>
+        <p><a href="../index.html"> Docs</a> (93% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -41,6 +41,12 @@
           <li class="nav-group-name">
             <a href="../Enums.html">Enums</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/AnimatorStyle.html">AnimatorStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/CacheQueryPolicy.html">CacheQueryPolicy</a>
+              </li>
               <li class="nav-group-task">
                 <a href="../Enums/Option.html">Option</a>
               </li>
@@ -189,6 +195,152 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:FC7Saffron12ImageManager5writeFTSS5imageGSqCSo7UIImage_4doneGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/write(_:image:done:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7Saffron12ImageManager5writeFTSS5imageGSqCSo7UIImage_4doneGSqFSbT___T_">write(_:image:done:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Write image to cache.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">write</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">image</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">?,</span> <span class="nv">done</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>key</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Key.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>image</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Value.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>done</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Callback.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7Saffron12ImageManager5fetchFTSS11queryPolicyOS_16CacheQueryPolicy4doneFGSqCSo7UIImage_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/fetch(_:queryPolicy:done:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7Saffron12ImageManager5fetchFTSS11queryPolicyOS_16CacheQueryPolicy4doneFGSqCSo7UIImage_T__T_">fetch(_:queryPolicy:done:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Fetch image from cache asynchronously.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">fetch</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">queryPolicy</span><span class="p">:</span> <span class="kt">CacheQueryPolicy</span> <span class="o">=</span> <span class="o">.</span><span class="kt">Normal</span><span class="p">,</span> <span class="nv">done</span><span class="p">:</span> <span class="p">(</span><span class="kt">UIImage</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>key</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Key.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>queryPolicy</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Query policy, see <code>CacheQueryPolicy</code>.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>done</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Callback when done in main thread.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:FC7Saffron12ImageManager13downloadImageFTSS8progressGSqFTVs5Int64S1__T__4doneFTGSqCSo7UIImage_GSqCSo7NSError__T__CSo11NSOperation"></a>
                     <a name="//apple_ref/swift/Method/downloadImage(_:progress:done:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FC7Saffron12ImageManager13downloadImageFTSS8progressGSqFTVs5Int64S1__T__4doneFTGSqCSo7UIImage_GSqCSo7NSError__T__CSo11NSOperation">downloadImage(_:progress:done:)</a>
@@ -255,6 +407,153 @@
                             </tr>
                           </tbody>
                         </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7Saffron12ImageManager14downloadImagesFTGSaSS_4doneFGSaGSqCSo7UIImage__T__T_"></a>
+                    <a name="//apple_ref/swift/Method/downloadImages(_:done:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7Saffron12ImageManager14downloadImagesFTGSaSS_4doneFGSaGSqCSo7UIImage__T__T_">downloadImages(_:done:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Batch download images.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">downloadImages</span><span class="p">(</span><span class="nv">urls</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="nv">done</span><span class="p">:</span> <span class="p">([</span><span class="kt">UIImage</span><span class="p">?])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>urls</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Array of url.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>done</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Compeletion handler in main thread.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7Saffron12ImageManager25downloadImageRespectCacheFTSS4doneFTGSqCSo7UIImage_GSqCSo7NSError__T__T_"></a>
+                    <a name="//apple_ref/swift/Method/downloadImageRespectCache(_:done:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7Saffron12ImageManager25downloadImageRespectCacheFTSS4doneFTGSqCSo7UIImage_GSqCSo7NSError__T__T_">downloadImageRespectCache(_:done:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Download image but first look up in cache.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">downloadImageRespectCache</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">done</span><span class="p">:</span> <span class="p">(</span><span class="kt">UIImage</span><span class="p">?,</span> <span class="kt">NSError</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>url</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Key.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>done</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Callback when done in main thread.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7Saffron12ImageManager19cancelAllOperationsFT_T_"></a>
+                    <a name="//apple_ref/swift/Method/cancelAllOperations()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7Saffron12ImageManager19cancelAllOperationsFT_T_">cancelAllOperations()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Cancel downoading operations.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">cancelAllOperations</span><span class="p">()</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -345,8 +644,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-05-09)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-06-12)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

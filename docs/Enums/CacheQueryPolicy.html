@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Option Enum Reference</title>
+    <title>CacheQueryPolicy Enum Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Enum/Option" class="dashAnchor"></a>
-    <a title="Option Enum Reference"></a>
+    <a name="//apple_ref/swift/Enum/CacheQueryPolicy" class="dashAnchor"></a>
+    <a title="CacheQueryPolicy Enum Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html"> Docs</a> (93% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html"> Reference</a>
         <img id="carat" src="../img/carat.png" />
-        Option Enum Reference
+        CacheQueryPolicy Enum Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -93,21 +93,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>Option</h1>
+            <h1>CacheQueryPolicy</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Option</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">CacheQueryPolicy</span></code></pre>
 
                 </div>
               </div>
-            <p>Options to edit image.</p>
-
-<ul>
-<li>GaussianBlur: Blur effect.</li>
-<li>CornerRadius: Round corner.</li>
-<li>ScaleToFill:  Crop image to fit container size.</li>
-<li>Oval: Crop image to oval.</li>
-</ul>
+            <p>Custom query policy.</p>
 
           </section>
           <section class="section task-group-section">
@@ -116,9 +109,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO7Saffron6Option12GaussianBlurFMS0_FV12CoreGraphics7CGFloatS0_"></a>
-                    <a name="//apple_ref/swift/Element/GaussianBlur" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO7Saffron6Option12GaussianBlurFMS0_FV12CoreGraphics7CGFloatS0_">GaussianBlur</a>
+                    <a name="/s:FO7Saffron16CacheQueryPolicy6NormalFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/Normal" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO7Saffron16CacheQueryPolicy6NormalFMS0_S0_">Normal</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -126,14 +119,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Pass a radius value.</p>
+                        <p>Query cache from memory and disk.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">GaussianBlur</span><span class="p">(</span><span class="kt">CGFloat</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">Normal</span></code></pre>
 
                         </div>
                       </div>
@@ -147,9 +140,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO7Saffron6Option12CornerRadiusFMS0_FV12CoreGraphics7CGFloatS0_"></a>
-                    <a name="//apple_ref/swift/Element/CornerRadius" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO7Saffron6Option12CornerRadiusFMS0_FV12CoreGraphics7CGFloatS0_">CornerRadius</a>
+                    <a name="/s:FO7Saffron16CacheQueryPolicy15IgnoreDiskCacheFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/IgnoreDiskCache" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO7Saffron16CacheQueryPolicy15IgnoreDiskCacheFMS0_S0_">IgnoreDiskCache</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -157,14 +150,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Corner radius might be different by image size.</p>
+                        <p>Query cache from memory only.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">CornerRadius</span><span class="p">(</span><span class="kt">CGFloat</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">IgnoreDiskCache</span></code></pre>
 
                         </div>
                       </div>
@@ -178,9 +171,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO7Saffron6Option11ScaleToFillFMS0_FVSC6CGSizeS0_"></a>
-                    <a name="//apple_ref/swift/Element/ScaleToFill" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO7Saffron6Option11ScaleToFillFMS0_FVSC6CGSizeS0_">ScaleToFill</a>
+                    <a name="/s:FO7Saffron16CacheQueryPolicy17IgnoreMemoryCacheFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/IgnoreMemoryCache" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO7Saffron16CacheQueryPolicy17IgnoreMemoryCacheFMS0_S0_">IgnoreMemoryCache</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -188,14 +181,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Scale to fill container.</p>
+                        <p>Query cache from disk only.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">ScaleToFill</span><span class="p">(</span><span class="kt">CGSize</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">IgnoreMemoryCache</span></code></pre>
 
                         </div>
                       </div>
@@ -209,9 +202,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO7Saffron6Option4OvalFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/Oval" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO7Saffron6Option4OvalFMS0_S0_">Oval</a>
+                    <a name="/s:FO7Saffron16CacheQueryPolicy14IgnoreAllCacheFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/IgnoreAllCache" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO7Saffron16CacheQueryPolicy14IgnoreAllCacheFMS0_S0_">IgnoreAllCache</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -219,94 +212,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Crop image to oval.</p>
+                        <p>Ignore cache.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">Oval</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">IgnoreAllCache</span></code></pre>
 
                         </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:ZFO7Saffron6Option5batchFTGSqCSo7UIImage_7optionsGSqGSaS0___4doneFGSqS1__T__T_"></a>
-                    <a name="//apple_ref/swift/Method/batch(_:options:done:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO7Saffron6Option5batchFTGSqCSo7UIImage_7optionsGSqGSaS0___4doneFGSqS1__T__T_">batch(_:options:done:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Perform batch operations, in order.
-Note: Animated UIImage would not be processed for now.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">batch</span><span class="p">(</span><span class="nv">image</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">?,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt">Option</span><span class="p">]?,</span> <span class="nv">done</span><span class="p">:</span> <span class="p">(</span><span class="kt">UIImage</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>image</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Input image.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>options</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Things to deal with image.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>done</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Callback when done, in main thread.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
                       </div>
                     </section>
                   </div>
