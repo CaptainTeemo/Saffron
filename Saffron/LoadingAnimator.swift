@@ -38,11 +38,21 @@ private let minMargin: CGFloat = 100
  Animation when showing image.
  */
 public enum RevealStyle {
-        /// Fade in effect.
-    case Fade
+        /// Fadein effect with duration.
+    case Fade(NSTimeInterval)
         /// Circle mask effect.
     case Circle
         /// No effect.
+    case None
+}
+
+/**
+ Animation when loading image.
+ */
+public enum AnimatorStyle {
+        /// Looks like a Material-Design loader.
+    case Material
+        /// No animator.
     case None
 }
 
@@ -61,6 +71,8 @@ public class DefaultAnimator: UIView {
     }
     
     private var _revealStyle: RevealStyle = .None
+
+    private var _animatorStyle: AnimatorStyle = .Material
     
     /**
      Init
@@ -71,13 +83,22 @@ public class DefaultAnimator: UIView {
      
      - returns: Instance.
      */
-    public init(loaderColor: UIColor = UIColor.redColor(), revealStyle: RevealStyle, reportProgress: Bool) {
+    public init(loaderColor: UIColor = UIColor.redColor(), animatorStyle: AnimatorStyle, revealStyle: RevealStyle, reportProgress: Bool) {
         super.init(frame: CGRectZero)
         
-        commonInit()
-
+        switch animatorStyle {
+        case .Material:
+            loaderLayer.lineWidth = _lineWidth
+            loaderLayer.fillColor = nil
+            loaderLayer.strokeColor = UIColor.redColor().CGColor
+            layer.addSublayer(loaderLayer)
+        default:
+            break
+        }
+        
         _reportProgress = reportProgress
         _revealStyle = revealStyle
+        _animatorStyle = animatorStyle
         loaderLayer.strokeColor = loaderColor.CGColor
         
         if reportProgress {
@@ -95,22 +116,14 @@ public class DefaultAnimator: UIView {
         }
     }
     
-    override init(frame: CGRect) {
+    private override init(frame: CGRect) {
         super.init(frame: frame)
         
-        commonInit()
     }
     
     /// Please use init(loaderColor:revealStyle:reportProgress:)
     required public init?(coder aDecoder: NSCoder) {
         fatalError("Please use init(loaderColor:revealStyle:reportProgress:)")
-    }
-    
-    func commonInit() {
-        loaderLayer.lineWidth = _lineWidth
-        loaderLayer.fillColor = nil
-        loaderLayer.strokeColor = UIColor.redColor().CGColor
-        layer.addSublayer(loaderLayer)
     }
     
     /**
@@ -192,9 +205,9 @@ public class DefaultAnimator: UIView {
                 
                 maskLayer.addAnimation(revealAnimation, forKey: "reveal")
                 
-            case .Fade:
+            case .Fade(let duration):
                 imageView.alpha = 0
-                UIView.animateWithDuration(0.8, animations: {
+                UIView.animateWithDuration(duration, animations: {
                     imageView.alpha = 1
                 })
             case .None:
@@ -215,19 +228,30 @@ extension DefaultAnimator: LoadingAnimator {
      Start loading animation.
      */
     public func startAnimation() {
-        hidden = false
-        if _reportProgress {
-            updateProgress(0.1)
-        } else {
-            addAnimation()
+        switch _animatorStyle {
+        case .Material:
+            hidden = false
+            if _reportProgress {
+                updateProgress(0.1)
+            } else {
+                addAnimation()
+            }
+        default:
+            break
         }
+
     }
     
     /**
      Remove animations.
      */
     public func removeAnimation() {
-        dismiss()
+        switch _animatorStyle {
+        case .Material:
+            dismiss()
+        default:
+            break
+        }
     }
     
     /**

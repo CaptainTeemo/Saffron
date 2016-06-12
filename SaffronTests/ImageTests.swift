@@ -107,6 +107,20 @@ class ImageTests: XCTestCase {
         self.waitForExpectationsWithTimeout(30, handler: nil)
     }
     
+    func testAnimator() {
+        let expectation = self.expectationWithDescription("imageView")
+        let imageView = UIImageView()
+        
+        let animator = DefaultAnimator(animatorStyle: .None, revealStyle: .Fade(0.6), reportProgress: false)
+        imageView.sf_setAnimationLoader(animator)
+        
+        imageView.sf_setImage(testUrl) { (image, error) in
+            imageView.sf_setImage(self.testUrl)
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(30, handler: nil)
+    }
+    
     func testBatchDownload() {
         let expectation = self.expectationWithDescription("batch download")
 
