@@ -24,7 +24,9 @@ public extension UIImageView {
         
         sf_cancelDownload()
         
-        self.image = placeholder
+        Option.batch(placeholder, options: options) { (result) in
+            self.image = result
+        }
         
         ImageManager.sharedManager().fetch(url, queryPolicy: queryPolicy) { (image) in
             if let cachedImage = image {
