@@ -30,9 +30,11 @@ public extension UIImageView {
         
         ImageManager.sharedManager().fetch(url, queryPolicy: queryPolicy) { (image) in
             if let cachedImage = image {
-                self.image = cachedImage
-                self._loadingAnimator?.removeAnimation()
-                done?(cachedImage, nil)
+                Option.batch(cachedImage, options: options, done: { (resultImage) in
+                    self.image = resultImage
+                    self._loadingAnimator?.removeAnimation()
+                    done?(resultImage, nil)
+                })
             } else {
                 self.startLoadingAnimation()
                 
