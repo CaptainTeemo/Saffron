@@ -48,8 +48,8 @@ public extension UIImageView {
                         if let downloadedImage = image {
                             Option.batch(downloadedImage, options: options, done: { (resultImage) in
                                 self.image = resultImage
-                                ImageManager.sharedManager().write(url, image: resultImage)
                             })
+                            ImageManager.sharedManager().write(url, image: downloadedImage)
                             self.removeLoadingAnimation()
                         }
                         done?(image, error)
