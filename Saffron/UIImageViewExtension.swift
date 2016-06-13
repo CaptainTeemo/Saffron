@@ -30,11 +30,17 @@ public extension UIImageView {
         
         ImageManager.sharedManager().fetch(url, queryPolicy: queryPolicy) { (image) in
             if let cachedImage = image {
-                Option.batch(cachedImage, options: options, done: { (resultImage) in
-                    self.image = resultImage
-                    self._loadingAnimator?.removeAnimation()
-                    done?(resultImage, nil)
-                })
+                guard let processedImage = self._cacheImage[url] else {
+                    Option.batch(cachedImage, options: options, done: { (resultImage) in
+                        self.image = resultImage
+                        self._cacheImage[url] = resultImage
+                        self._loadingAnimator?.removeAnimation()
+                        done?(resultImage, nil)
+                    })
+                    return
+                }
+                done?(processedImage, nil)
+                
             } else {
                 self.startLoadingAnimation()
                 
@@ -127,6 +133,7 @@ public extension UIImageView {
 
 private var animatorKey: Void?
 private var operationKey: Void?
+private var cacheImageKey: Void?
 
 private extension UIImageView {
     
@@ -145,6 +152,16 @@ private extension UIImageView {
         }
         get {
             return objc_getAssociatedObject(self, &operationKey) as? [String: NSOperation]
+        }
+    }
+    
+    private var _cacheImage: [String: UIImage] {
+        set {
+            objc_setAssociatedObject(self, &cacheImageKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+        
+        get {
+            return objc_getAssociatedObject(self, &cacheImageKey) as? [String: UIImage] ?? [:]
         }
     }
     
