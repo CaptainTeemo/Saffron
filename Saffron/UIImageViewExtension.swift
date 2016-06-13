@@ -28,19 +28,23 @@ public extension UIImageView {
             self.image = result
         }
         
+        if _cacheImage == nil {
+            _cacheImage = [String: UIImage]()
+        }
+        
         ImageManager.sharedManager().fetch(url, queryPolicy: queryPolicy) { (image) in
             if let cachedImage = image {
-                guard let processedImage = self._cacheImage[url] else {
+                guard let processedImage = self._cacheImage![url] else {
                     Option.batch(cachedImage, options: options, done: { (resultImage) in
                         self.image = resultImage
-                        self._cacheImage[url] = resultImage
                         self._loadingAnimator?.removeAnimation()
                         done?(resultImage, nil)
                     })
                     return
                 }
+                self.image = processedImage
+                self._loadingAnimator?.removeAnimation()
                 done?(processedImage, nil)
-                
             } else {
                 self.startLoadingAnimation()
                 
@@ -54,6 +58,7 @@ public extension UIImageView {
                         if let downloadedImage = image {
                             Option.batch(downloadedImage, options: options, done: { (resultImage) in
                                 self.image = resultImage
+                                self._cacheImage![url] = resultImage
                             })
                             ImageManager.sharedManager().write(url, image: downloadedImage)
                             self.removeLoadingAnimation()
@@ -155,13 +160,13 @@ private extension UIImageView {
         }
     }
     
-    private var _cacheImage: [String: UIImage] {
+    private var _cacheImage: [String: UIImage]? {
         set {
             objc_setAssociatedObject(self, &cacheImageKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
         
         get {
-            return objc_getAssociatedObject(self, &cacheImageKey) as? [String: UIImage] ?? [:]
+            return objc_getAssociatedObject(self, &cacheImageKey) as? [String: UIImage]
         }
     }
     
