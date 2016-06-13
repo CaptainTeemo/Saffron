@@ -20,7 +20,7 @@ public extension UIImageView {
      */
     public func sf_setImage(url: String, placeholder: UIImage? = nil, queryPolicy: CacheQueryPolicy = .Normal, options: [Option]? = nil, done: ((UIImage?, NSError?) -> Void)? = nil) {
         
-        let url = url.stringByReplacingOccurrencesOfString(" ", withString: "")
+        assert(!url.containsString(" "), "url string should not contain space characters")
         
         sf_cancelDownload()
         
@@ -30,11 +30,9 @@ public extension UIImageView {
         
         ImageManager.sharedManager().fetch(url, queryPolicy: queryPolicy) { (image) in
             if let cachedImage = image {
-                Option.batch(cachedImage, options: options, done: { (resultImage) in
-                    self.image = resultImage
-                    self._loadingAnimator?.removeAnimation()
-                    done?(resultImage, nil)
-                })
+                self.image = cachedImage
+                self._loadingAnimator?.removeAnimation()
+                done?(cachedImage, nil)
             } else {
                 self.startLoadingAnimation()
                 
@@ -48,8 +46,8 @@ public extension UIImageView {
                         if let downloadedImage = image {
                             Option.batch(downloadedImage, options: options, done: { (resultImage) in
                                 self.image = resultImage
+                                ImageManager.sharedManager().write(url, image: resultImage)
                             })
-                            ImageManager.sharedManager().write(url, image: downloadedImage)
                             self.removeLoadingAnimation()
                         }
                         done?(image, error)
