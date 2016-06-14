@@ -34,18 +34,11 @@ public extension UIImageView {
         
         ImageManager.sharedManager().fetch(url, queryPolicy: queryPolicy) { (image) in
             if let cachedImage = image {
-                guard let processedImage = self._cacheImage![url] else {
-                    Option.batch(cachedImage, options: options, done: { (resultImage) in
-                        self.image = resultImage
-                        self._cacheImage![url] = resultImage
-                        self._loadingAnimator?.removeAnimation()
-                        done?(resultImage, nil)
-                    })
-                    return
-                }
-                self.image = processedImage
-                self._loadingAnimator?.removeAnimation()
-                done?(processedImage, nil)
+                Option.batch(cachedImage, options: options, done: { (resultImage) in
+                    self.image = resultImage
+                    self._loadingAnimator?.removeAnimation()
+                    done?(resultImage, nil)
+                })
             } else {
                 self.startLoadingAnimation()
                 
