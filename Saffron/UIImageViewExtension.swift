@@ -37,6 +37,7 @@ public extension UIImageView {
                 guard let processedImage = self._cacheImage![url] else {
                     Option.batch(cachedImage, options: options, done: { (resultImage) in
                         self.image = resultImage
+                        self._cacheImage![url] = resultImage
                         self._loadingAnimator?.removeAnimation()
                         done?(resultImage, nil)
                     })
@@ -58,7 +59,6 @@ public extension UIImageView {
                         if let downloadedImage = image {
                             Option.batch(downloadedImage, options: options, done: { (resultImage) in
                                 self.image = resultImage
-                                self._cacheImage![url] = resultImage
                             })
                             ImageManager.sharedManager().write(url, image: downloadedImage)
                             self.removeLoadingAnimation()
