@@ -12,15 +12,13 @@ public extension UIImageView {
     /**
      Set image with url.
      
-     - parameter url:         Image url.
-     - parameter placeholder: Placeholder image.
-     - parameter queryPolicy: Query policy, see `CacheQueryPolicy`.
-     - parameter options:     Options to edit image, see `Option`.
-     - parameter done:        Callback when done.
+     - parameter url:             Image url.
+     - parameter placeholder:     Placeholder image.
+     - parameter progressiveBlur: Show blur style progressive image.
+     - parameter options:         Options to edit image, see `Option`.
+     - parameter done:            Callback when done.
      */
-    public func sf_setImage(url: String, placeholder: UIImage? = nil, queryPolicy: CacheQueryPolicy = .Normal, options: [Option]? = nil, done: ((UIImage?, NSError?) -> Void)? = nil) {
-        
-        assert(!url.containsString(" "), "url string should not contain space characters")
+    public func sf_setImage(_ url: URL, placeholder: UIImage? = nil, progressiveBlur: Bool = false, options: [Option]? = nil, done: ((UIImage?, NSError?) -> Void)? = nil) {
         
         sf_cancelDownload()
         
@@ -32,7 +30,7 @@ public extension UIImageView {
             _cacheImage = [String: UIImage]()
         }
         
-        ImageManager.sharedManager().fetch(url, queryPolicy: queryPolicy) { (image) in
+        ImageManager.shared.fetch(url.absoluteString) { (image) in
             if let cachedImage = image {
                 Option.batch(cachedImage, options: options, done: { (resultImage) in
                     self.image = resultImage
@@ -42,27 +40,41 @@ public extension UIImageView {
             } else {
                 self.startLoadingAnimation()
                 
-                let task = ImageManager.sharedManager().downloadImage(
+                var progressiveClosure: ((UIImage) -> Void)? = nil
+                if progressiveBlur {
+                    progressiveClosure = { image in
+                        dispatchOnMain({
+                            self.image = image
+                        })
+                    }
+                }
+                
+                let task = ImageManager.shared.downloadImage(
                     url,
                     progress: { (received, total) in
                         self._loadingAnimator?.progress?(received, total)
                     },
+                    progressiveImage: progressiveClosure,
                     done: { (image, error) in
-                        self._operations?.removeValueForKey(url)
+                        let _ = self._operations?.removeValue(forKey: url.absoluteString)
                         if let downloadedImage = image {
                             Option.batch(downloadedImage, options: options, done: { (resultImage) in
                                 self.image = resultImage
                             })
-                            ImageManager.sharedManager().write(url, image: downloadedImage)
+                            ImageManager.shared.write(url.absoluteString, image: downloadedImage)
+                            
                             self.removeLoadingAnimation()
+                            if !progressiveBlur {
+                                self.reveal()
+                            }
                         }
                         done?(image, error)
                 })
                 
                 if self._operations == nil {
-                    self._operations = [String: NSOperation]()
+                    self._operations = [String: Operation]()
                 }
-                self._operations![url] = task
+                self._operations![url.absoluteString] = task
             }
         }
     }
@@ -79,7 +91,7 @@ public extension UIImageView {
      
      - parameter loaderView: Custom loader view, it must conform protocol `LoadingAnimator`.
      */
-    public func sf_setAnimationLoader<T: UIView where T: LoadingAnimator>(loaderView: T) {
+    public func sf_setAnimationLoader<T: UIView>(_ loaderView: T) where T: LoadingAnimator {
         for subview in subviews {
             if subview is LoadingAnimator {
                 subview.removeFromSuperview()
@@ -91,39 +103,39 @@ public extension UIImageView {
         
         NSLayoutConstraint(
             item: loaderView,
-            attribute: .Top,
-            relatedBy: .Equal,
+            attribute: .top,
+            relatedBy: .equal,
             toItem: self,
-            attribute: .Top,
+            attribute: .top,
             multiplier: 1,
-            constant: 0).active = true
+            constant: 0).isActive = true
         
         NSLayoutConstraint(
             item: loaderView,
-            attribute: .Leading,
-            relatedBy: .Equal,
+            attribute: .leading,
+            relatedBy: .equal,
             toItem: self,
-            attribute: .Leading,
+            attribute: .leading,
             multiplier: 1,
-            constant: 0).active = true
+            constant: 0).isActive = true
         
         NSLayoutConstraint(
             item: loaderView,
-            attribute: .Bottom,
-            relatedBy: .Equal,
+            attribute: .bottom,
+            relatedBy: .equal,
             toItem: self,
-            attribute: .Bottom,
+            attribute: .bottom,
             multiplier: 1,
-            constant: 0).active = true
+            constant: 0).isActive = true
         
         NSLayoutConstraint(
             item: loaderView,
-            attribute: .Trailing,
-            relatedBy: .Equal,
+            attribute: .trailing,
+            relatedBy: .equal,
             toItem: self,
-            attribute: .Trailing,
+            attribute: .trailing,
             multiplier: 1,
-            constant: 0).active = true
+            constant: 0).isActive = true
         
         _loadingAnimator = loaderView
     }
@@ -135,7 +147,7 @@ private var cacheImageKey: Void?
 
 private extension UIImageView {
     
-    private var _loadingAnimator: LoadingAnimator? {
+    var _loadingAnimator: LoadingAnimator? {
         set {
             objc_setAssociatedObject(self, &animatorKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
@@ -144,16 +156,16 @@ private extension UIImageView {
         }
     }
     
-    private var _operations: [String: NSOperation]? {
+    var _operations: [String: Operation]? {
         set {
             objc_setAssociatedObject(self, &operationKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
         get {
-            return objc_getAssociatedObject(self, &operationKey) as? [String: NSOperation]
+            return objc_getAssociatedObject(self, &operationKey) as? [String: Operation]
         }
     }
     
-    private var _cacheImage: [String: UIImage]? {
+    var _cacheImage: [String: UIImage]? {
         set {
             objc_setAssociatedObject(self, &cacheImageKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
@@ -163,12 +175,15 @@ private extension UIImageView {
         }
     }
     
-    private func startLoadingAnimation() {
+    func startLoadingAnimation() {
         _loadingAnimator?.startAnimation()
     }
     
-    private func removeLoadingAnimation() {
+    func removeLoadingAnimation() {
         _loadingAnimator?.removeAnimation()
+    }
+    
+    func reveal() {
         _loadingAnimator?.reveal?()
     }
 }

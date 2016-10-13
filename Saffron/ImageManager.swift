@@ -8,40 +8,62 @@
 
 import Foundation
 
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+    switch (lhs, rhs) {
+    case let (l?, r?):
+        return l < r
+    case (nil, _?):
+        return true
+    default:
+        return false
+    }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+    switch (lhs, rhs) {
+    case let (l?, r?):
+        return l > r
+    default:
+        return rhs < lhs
+    }
+}
+
+
 private let ErrorDomain = "SaffronErrorDomain"
 
 /// Handle image download and cache stuff.
-public class ImageManager {
-    private static let _sharedManager = ImageManager()
-    private var _cache = Cache<UIImage>(cacheDirectoryPath: ImageManager.cachePath)
-    private let _queue = NSOperationQueue()
+public final class ImageManager {
+        /// Singleton access.
+    public static let shared = ImageManager()
+    
+    fileprivate var _cache = Cache<String, UIImage>(name: "com.saffron.imagecache")
+    fileprivate let _queue = OperationQueue()
     
         /// How soon the image cache will be expired.
-    public var maxCacheAge = NSTimeInterval.infinity {
+    open var maxCacheAge = TimeInterval.infinity {
         willSet {
             _cache.maxAge = newValue
         }
     }
     
-        /// Path of image cache.
-    public static var cachePath: String {
-        let cachesPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0]
-        return cachesPath + "/com.saffron.imagecache"
-    }
-    
-    /**
-     Singleton access.
-     
-     - returns: Instance of ImageManager
-     */
-    public class func sharedManager() -> ImageManager {
-        return _sharedManager
-    }
-    
-    private init() {
+    fileprivate init() {
         // since NSCache will be automatically purged when receiving memory warning, we might not need it anymore.
-        NSNotificationCenter.defaultCenter().addObserverForName(UIApplicationDidReceiveMemoryWarningNotification, object: nil, queue: nil) { (notification) in
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidReceiveMemoryWarning, object: nil, queue: nil) { (notification) in
             self.purgeMemory()
+        }
+        
+        _cache.manualArchive = { path, image in
+            let saved = FileManager.default.createFile(atPath: path, contents: image.sf_isGIF ? image.gifData : UIImagePNGRepresentation(image), attributes: nil)
+            if !saved {
+                print("save failed")
+            }
+        }
+        
+        _cache.manualUnarchive = { path in
+            if let data = FileManager.default.contents(atPath: path) {
+                return UIImage.animatedGIF(data)
+            }
+            return nil
         }
     }
     
@@ -52,8 +74,8 @@ public class ImageManager {
      - parameter image: Value.
      - parameter done:  Callback.
      */
-    public func write(key: String, image: UIImage?, done: ((Bool) -> Void)? = nil) {
-        _cache.write(key, value: image, done: done)
+    public func write(_ key: String, image: UIImage, done: (() -> Void)? = nil) {
+        _cache.save(key: key, value: image, done: done)
     }
     
     /**
@@ -63,19 +85,28 @@ public class ImageManager {
      - parameter queryPolicy:     Query policy, see `CacheQueryPolicy`.
      - parameter done:            Callback when done in main thread.
      */
-    public func fetch(key: String, queryPolicy: CacheQueryPolicy = .Normal, done: (UIImage?) -> Void) {
-        _cache.fetch(key, queryPolicy: queryPolicy) { (image) in
-            self._queue.addOperationWithBlock({ 
-                var cachedImage = image
-                if image?.gifData == nil {
-                    cachedImage = UIImage.decodeImage(image)
-                }
-                dispatchOnMain({
-                    done(cachedImage)
-                })
-            })
-
+    public func fetch(_ key: String, done: @escaping (UIImage?) -> Void) {
+        _cache.fetch(by: key) { (image) in
+            var cachedImage = image
+            if let image = image, !image.sf_isGIF {
+                cachedImage = UIImage.decodeImage(image)
+            }
+            dispatchOnMain {
+                done(cachedImage)
+            }
         }
+//        _cache.fetch(key, queryPolicy: queryPolicy) { (image) in
+//            self._queue.addOperation({ 
+//                var cachedImage = image
+//                if image?.gifData == nil {
+//                    cachedImage = UIImage.decodeImage(image)
+//                }
+//                dispatchOnMain({
+//                    done(cachedImage)
+//                })
+//            })
+//
+//        }
     }
     
     /**
@@ -83,25 +114,31 @@ public class ImageManager {
      
      - parameter url:  Image url.
      - parameter progress: Report downloading progress.
+     - parameter progressiveImage: Fetch current progressive image.
      - parameter done: Callback when done in main thread.
      */
-    public func downloadImage(url: String, progress: ((Int64, Int64) -> Void)? = nil, done: (UIImage?, NSError?) -> Void) -> NSOperation {
+    @discardableResult public func downloadImage(_ url: URL, progress: ((Int64, Int64) -> Void)? = nil, progressiveImage: ((UIImage) -> Void)? = nil, done: @escaping (UIImage?, NSError?) -> Void) -> Operation {
         let downloadOperation = DownloadOperation(url: url, queue: _queue)
         downloadOperation.progress = progress
+        downloadOperation.progressiveClosure = progressiveImage
         downloadOperation.completionBlock = { () -> Void in
             var image: UIImage?
             var error: NSError?
-            if downloadOperation.finished {
-                if let d = downloadOperation.data {
-                    if url.rangeOfString(".gif")?.count > 0 {
-                        image = UIImage.animatedGIF(d)
-                        image?.gifData = d
+            if downloadOperation.isFinished {
+                if let data = downloadOperation.data {
+                    if let range = url.absoluteString.range(of: ".gif"), !range.isEmpty {
+                        image = UIImage.animatedGIF(data)
+                        image?.gifData = data
                     } else {
-                        image = UIImage.decodeImage(UIImage(data: d))
+                        image = UIImage.decodeImage(UIImage(data: data))
                     }
                 } else {
                     error = NSError(domain: ErrorDomain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Donwload failed"])
                 }
+            }
+            
+            if downloadOperation.isCancelled {
+                error = NSError(domain: ErrorDomain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Donwload cancelled"])
             }
             
             dispatchOnMain({ 
@@ -120,25 +157,27 @@ public class ImageManager {
      - parameter urls:     Array of url.
      - parameter done:     Compeletion handler in main thread.
      */
-    public func downloadImages(urls: [String], done: ([UIImage?]) -> Void) {
+    public func downloadImages(_ urls: [URL], done: @escaping ([UIImage?]) -> Void) {
         var images = [UIImage?]()
-        let group = dispatch_group_create()
+        let group = DispatchGroup()
         
         for url in urls {
-            dispatch_group_enter(group)
-            self._cache.fetch(url, done: { (image) in
-                guard image == nil else { dispatch_group_leave(group); return }
+            group.enter()
+            self._cache.fetch(by: url.absoluteString, done: { (image) in
+                guard image == nil else { group.leave(); return }
                 self.downloadImage(url, done: { (image, error) in
-                    self._cache.write(url, value: image, done: { (finished) in
-                        dispatch_group_leave(group)
-                    })
+                    if let downloadedImage = image {
+                        self._cache.save(key: url.absoluteString, value: downloadedImage, done: { 
+                            group.leave()
+                        })
+                    }
                 })
             })
         }
         
-        dispatch_group_notify(group, dispatch_get_main_queue()) { 
+        group.notify(queue: DispatchQueue.main) { 
             for url in urls {
-                self._cache.fetch(url, done: { (image) in
+                self._cache.fetch(by: url.absoluteString, done: { (image) in
                     images.append(image)
                     if images.count == urls.count {
                         done(images)
@@ -154,21 +193,22 @@ public class ImageManager {
      - parameter url:  Key.
      - parameter done: Callback when done in main thread.
      */
-    public func downloadImageRespectCache(url: String, done: (UIImage?, NSError?) -> Void) {
-        _cache.fetch(url) { (image) in
+    public func downloadImageRespectCache(_ url: URL, task: ((Operation) -> Void)? = nil, progress: ((Int64, Int64) -> Void)? = nil, done: @escaping (UIImage?, NSError?) -> Void) {
+        _cache.fetch(by: url.absoluteString) { (image) in
             if let cachedImage = image {
-                dispatchOnMain({ 
+                dispatchOnMain({
                     done(cachedImage, nil)
                 })
             } else {
-                self.downloadImage(url, done: { (downloadedImage, error) in
+                let operation = self.downloadImage(url, progress: progress, done: { (downloadedImage, error) in
                     guard let d = downloadedImage else { done(nil, error); return }
-                    self._cache.write(url, value: d, done: { (finished) in
-                        dispatchOnMain({ 
+                    self._cache.save(key: url.absoluteString, value: d, done: { (finished) in
+                        dispatchOnMain({
                             done(d, error)
                         })
                     })
                 })
+                task?(operation)
             }
         }
     }
@@ -184,62 +224,63 @@ public class ImageManager {
      Clear memory cache.
      */
     public func purgeMemory() {
-        _cache.clearMemoryCache()
+        _cache.clearMemory()
     }
     
     /**
      Clear disk cache.
      */
     public func cleanDisk() {
-        _cache.clearDiskCache()
+        _cache.clearDisk()
     }
     
     /**
      Clear memory and disk cache.
      */
     public func clearCache() {
-        _cache.clearMemoryCache()
-        _cache.clearDiskCache()
+        _cache.clear()
     }
 }
 
 // MARK: Download Operation
-private class DownloadOperation: NSOperation {
+private class DownloadOperation: Operation {
+    fileprivate var _url: URL
+    fileprivate var _queue: OperationQueue
+    fileprivate var _task: URLSessionTask?
+    fileprivate var _totalBytes: Int64 = 0
+    fileprivate var _mutableData = Data()
+    fileprivate var _progressiveImage: ProgressiveImage?
     
-    private var _url: String
-    private var _queue: NSOperationQueue
-    private var _task: NSURLSessionTask?
-    
-    private var _finished = false
-    override var finished: Bool {
+    fileprivate var _finished = false
+    override var isFinished: Bool {
         set {
-            self.willChangeValueForKey("isFinished")
+            self.willChangeValue(forKey: "isFinished")
             _finished = newValue
-            self.didChangeValueForKey("isFinished")
+            self.didChangeValue(forKey: "isFinished")
         }
         get {
             return _finished
         }
     }
     
-    var data: NSData?
+    var data: Data?
     var progress: ((Int64, Int64) -> Void)?
+    var progressiveClosure: ((UIImage) -> Void)?
     
-    init(url: String, queue: NSOperationQueue) {
+    init(url: URL, queue: OperationQueue) {
         _url = url
         _queue = queue
     }
     
     override func start() {
-        if cancelled {
+        if isCancelled {
             return
         }
         
-        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session = NSURLSession(configuration: config, delegate: self, delegateQueue: self._queue)
-        let URL = NSURL(string: _url)!
-        let request = NSURLRequest(URL: URL, cachePolicy: .ReloadRevalidatingCacheData, timeoutInterval: 15)
-        let task = session.downloadTaskWithRequest(request)
+        let config = URLSessionConfiguration.default
+        let session = Foundation.URLSession(configuration: config, delegate: self, delegateQueue: self._queue)
+        let request = URLRequest(url: _url, cachePolicy: .reloadRevalidatingCacheData, timeoutInterval: 15)
+        let task = session.dataTask(with: request)
         task.resume()
         
         _task = task
@@ -251,37 +292,44 @@ private class DownloadOperation: NSOperation {
     }
 }
 
-extension DownloadOperation: NSURLSessionDownloadDelegate {
-    @objc func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
+extension DownloadOperation: URLSessionDataDelegate {
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
+        _totalBytes = response.expectedContentLength
         
-        if cancelled {
+        completionHandler(_totalBytes > 0 ? .allow : .cancel)
+    }
+    
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        if isCancelled {
+            isFinished = true
+            self.data = nil
             return
         }
         
-        let data = NSData(contentsOfURL: location)
-        self.data = data
+//        data.enumerateBytes { (bytes, range, stop) in
+//            self._mutableData.append(Data(bytes: UnsafeBufferPointer<UInt8>(bytes), count: range.length))
+//        }
         
-        finished = true
-    }
-    
-    @objc func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        progress?(totalBytesWritten, totalBytesExpectedToWrite)
-    }
-    
-    @objc func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
-        if let _ = error {
-            finished = true
+        _mutableData.append(data)
+        
+        progress?(Int64(_mutableData.count), _totalBytes)
+        
+        if progressiveClosure != nil {
+            if _progressiveImage == nil {
+                _progressiveImage = ProgressiveImage()
+            }
+            _progressiveImage?.updateProgressiveImage(data, expectedNumberOfBytes: _totalBytes)
+            if let image = _progressiveImage?.currentImage(true, quality: 1) {
+                progressiveClosure?(image)
+            }
         }
     }
-}
-
-// MARK: unit test
-extension ImageManager {
-    func fetchMemory(key: String) -> UIImage? {
-        return _cache.fetchMemory(key)
-    }
     
-    func fetchDisk(key: String) -> UIImage? {
-        return _cache.fetchDisk(key)
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Swift.Error?) {
+        data = _mutableData as Data
+        if Int64(_mutableData.count) != _totalBytes {
+            data = nil
+        }
+        isFinished = true
     }
 }

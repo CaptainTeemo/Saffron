@@ -9,10 +9,13 @@
 /* Begin PBXBuildFile section */
 		CF99679C1CD8999D00206629 /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF99679B1CD8999D00206629 /* Option.swift */; };
 		CF99679E1CD89BD000206629 /* ImageEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF99679D1CD89BD000206629 /* ImageEditor.swift */; };
+		CF9C104E1D3BCCD200CF9D63 /* test.gif in Resources */ = {isa = PBXBuildFile; fileRef = CF9C104D1D3BCCD200CF9D63 /* test.gif */; };
+		CF9C105E1D3C8C1D00CF9D63 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9C105D1D3C8C1D00CF9D63 /* Error.swift */; };
+		CFA0B1B51D3B8D3000D98EA5 /* GifToVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA0B1B41D3B8D3000D98EA5 /* GifToVideo.swift */; };
+		CFA0B1B71D3B8D9200D98EA5 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFA0B1B61D3B8D9200D98EA5 /* AVFoundation.framework */; };
 		CFFA749A1CBE2A82004D1FD9 /* Saffron.h in Headers */ = {isa = PBXBuildFile; fileRef = CFFA74991CBE2A82004D1FD9 /* Saffron.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFFA74A11CBE2A82004D1FD9 /* Saffron.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFFA74961CBE2A82004D1FD9 /* Saffron.framework */; };
 		CFFA74B61CBE2AA4004D1FD9 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA74B01CBE2AA4004D1FD9 /* Cache.swift */; };
-		CFFA74B71CBE2AA4004D1FD9 /* DataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA74B11CBE2AA4004D1FD9 /* DataConvertible.swift */; };
 		CFFA74B81CBE2AA4004D1FD9 /* GifEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA74B21CBE2AA4004D1FD9 /* GifEncoder.swift */; };
 		CFFA74B91CBE2AA4004D1FD9 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA74B31CBE2AA4004D1FD9 /* ImageManager.swift */; };
 		CFFA74BA1CBE2AA4004D1FD9 /* LoadingAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA74B41CBE2AA4004D1FD9 /* LoadingAnimator.swift */; };
@@ -20,6 +23,7 @@
 		CFFA74BF1CBE2AD3004D1FD9 /* CacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA74BC1CBE2AD3004D1FD9 /* CacheTests.swift */; };
 		CFFA74C01CBE2AD3004D1FD9 /* ImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA74BD1CBE2AD3004D1FD9 /* ImageTests.swift */; };
 		CFFA74C11CBE2AD3004D1FD9 /* Teemo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CFFA74BE1CBE2AD3004D1FD9 /* Teemo.jpg */; };
+		CFFDE3461D13BA2C00D488C8 /* ProgressiveImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFDE3451D13BA2C00D488C8 /* ProgressiveImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,13 +39,16 @@
 /* Begin PBXFileReference section */
 		CF99679B1CD8999D00206629 /* Option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
 		CF99679D1CD89BD000206629 /* ImageEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageEditor.swift; sourceTree = "<group>"; };
+		CF9C104D1D3BCCD200CF9D63 /* test.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = test.gif; sourceTree = "<group>"; };
+		CF9C105D1D3C8C1D00CF9D63 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		CFA0B1B41D3B8D3000D98EA5 /* GifToVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GifToVideo.swift; sourceTree = "<group>"; };
+		CFA0B1B61D3B8D9200D98EA5 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		CFFA74961CBE2A82004D1FD9 /* Saffron.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Saffron.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFFA74991CBE2A82004D1FD9 /* Saffron.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Saffron.h; sourceTree = "<group>"; };
 		CFFA749B1CBE2A82004D1FD9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CFFA74A01CBE2A82004D1FD9 /* SaffronTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SaffronTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFFA74A71CBE2A82004D1FD9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CFFA74B01CBE2AA4004D1FD9 /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
-		CFFA74B11CBE2AA4004D1FD9 /* DataConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataConvertible.swift; sourceTree = "<group>"; };
 		CFFA74B21CBE2AA4004D1FD9 /* GifEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GifEncoder.swift; sourceTree = "<group>"; };
 		CFFA74B31CBE2AA4004D1FD9 /* ImageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		CFFA74B41CBE2AA4004D1FD9 /* LoadingAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingAnimator.swift; sourceTree = "<group>"; };
@@ -49,6 +56,7 @@
 		CFFA74BC1CBE2AD3004D1FD9 /* CacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheTests.swift; sourceTree = "<group>"; };
 		CFFA74BD1CBE2AD3004D1FD9 /* ImageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageTests.swift; sourceTree = "<group>"; };
 		CFFA74BE1CBE2AD3004D1FD9 /* Teemo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Teemo.jpg; sourceTree = "<group>"; };
+		CFFDE3451D13BA2C00D488C8 /* ProgressiveImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressiveImage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFA0B1B71D3B8D9200D98EA5 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,6 +82,7 @@
 		CFFA748C1CBE2A82004D1FD9 = {
 			isa = PBXGroup;
 			children = (
+				CFA0B1B61D3B8D9200D98EA5 /* AVFoundation.framework */,
 				CFFA74981CBE2A82004D1FD9 /* Saffron */,
 				CFFA74A41CBE2A82004D1FD9 /* SaffronTests */,
 				CFFA74971CBE2A82004D1FD9 /* Products */,
@@ -92,7 +102,6 @@
 			isa = PBXGroup;
 			children = (
 				CFFA74B01CBE2AA4004D1FD9 /* Cache.swift */,
-				CFFA74B11CBE2AA4004D1FD9 /* DataConvertible.swift */,
 				CFFA74B21CBE2AA4004D1FD9 /* GifEncoder.swift */,
 				CFFA74B31CBE2AA4004D1FD9 /* ImageManager.swift */,
 				CFFA74B41CBE2AA4004D1FD9 /* LoadingAnimator.swift */,
@@ -101,6 +110,9 @@
 				CF99679D1CD89BD000206629 /* ImageEditor.swift */,
 				CFFA74991CBE2A82004D1FD9 /* Saffron.h */,
 				CFFA749B1CBE2A82004D1FD9 /* Info.plist */,
+				CFFDE3451D13BA2C00D488C8 /* ProgressiveImage.swift */,
+				CFA0B1B41D3B8D3000D98EA5 /* GifToVideo.swift */,
+				CF9C105D1D3C8C1D00CF9D63 /* Error.swift */,
 			);
 			path = Saffron;
 			sourceTree = "<group>";
@@ -108,6 +120,7 @@
 		CFFA74A41CBE2A82004D1FD9 /* SaffronTests */ = {
 			isa = PBXGroup;
 			children = (
+				CF9C104D1D3BCCD200CF9D63 /* test.gif */,
 				CFFA74BC1CBE2AD3004D1FD9 /* CacheTests.swift */,
 				CFFA74BD1CBE2AD3004D1FD9 /* ImageTests.swift */,
 				CFFA74BE1CBE2AD3004D1FD9 /* Teemo.jpg */,
@@ -173,14 +186,20 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Captain Teemo";
 				TargetAttributes = {
 					CFFA74951CBE2A82004D1FD9 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = 6T7XGFHMKC;
+						DevelopmentTeamName = "Captain Teemo (Personal Team)";
+						LastSwiftMigration = 0800;
 					};
 					CFFA749F1CBE2A82004D1FD9 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = 6T7XGFHMKC;
+						DevelopmentTeamName = "Captain Teemo (Personal Team)";
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -214,6 +233,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF9C104E1D3BCCD200CF9D63 /* test.gif in Resources */,
 				CFFA74C11CBE2AD3004D1FD9 /* Teemo.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -226,10 +246,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				CFFA74B81CBE2AA4004D1FD9 /* GifEncoder.swift in Sources */,
+				CFA0B1B51D3B8D3000D98EA5 /* GifToVideo.swift in Sources */,
+				CFFDE3461D13BA2C00D488C8 /* ProgressiveImage.swift in Sources */,
+				CF9C105E1D3C8C1D00CF9D63 /* Error.swift in Sources */,
 				CFFA74B61CBE2AA4004D1FD9 /* Cache.swift in Sources */,
 				CFFA74BB1CBE2AA4004D1FD9 /* UIImageViewExtension.swift in Sources */,
 				CFFA74BA1CBE2AA4004D1FD9 /* LoadingAnimator.swift in Sources */,
-				CFFA74B71CBE2AA4004D1FD9 /* DataConvertible.swift in Sources */,
 				CF99679E1CD89BD000206629 /* ImageEditor.swift in Sources */,
 				CFFA74B91CBE2AA4004D1FD9 /* ImageManager.swift in Sources */,
 				CF99679C1CD8999D00206629 /* Option.swift in Sources */,
@@ -270,8 +292,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -319,8 +343,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -340,6 +366,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -350,7 +377,9 @@
 		CFFA74AB1CBE2A82004D1FD9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -362,13 +391,16 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		CFFA74AC1CBE2A82004D1FD9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -379,6 +411,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.captainteemo.Saffron;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -389,6 +422,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.captainteemo.SaffronTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -399,6 +433,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.captainteemo.SaffronTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

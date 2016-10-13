@@ -8,20 +8,28 @@
 import Accelerate
 
 extension UIImage {
-    
-    func blur(radius: CGFloat, iterations: Int = 2, ratio: CGFloat = 1.2, blendColor: UIColor? = nil) -> UIImage? {
+    func blur(with radius: CGFloat, iterations: Int = 2, ratio: CGFloat = 1.2, blendColor: UIColor? = nil) -> UIImage? {
         if floorf(Float(size.width)) * floorf(Float(size.height)) <= 0.0 || radius <= 0 {
             return self
         }
-        let imageRef = CGImage
+        var imageRef = cgImage
+        
+        if !isARGB8888(imageRef: imageRef!) {
+            let context = createARGB8888BitmapContext(from: imageRef!)
+            let rect = CGRect(x: 0, y: 0, width: imageRef!.width, height: imageRef!.height)
+            context?.draw(imageRef!, in: rect)
+            
+            imageRef = context?.makeImage()
+        }
+        
         var boxSize = UInt32(radius * scale * ratio)
         if boxSize % 2 == 0 {
             boxSize += 1
         }
         
-        let height = CGImageGetHeight(imageRef)
-        let width = CGImageGetWidth(imageRef)
-        let rowBytes = CGImageGetBytesPerRow(imageRef)
+        let height = imageRef!.height
+        let width = imageRef!.width
+        let rowBytes = imageRef!.bytesPerRow
         let bytes = rowBytes * height
         
         let inData = malloc(bytes)
@@ -34,8 +42,8 @@ extension UIImage {
         let tempSize = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, nil, 0, 0, boxSize, boxSize, nil, tempFlags)
         let tempBuffer = malloc(tempSize)
         
-        let provider = CGImageGetDataProvider(imageRef)
-        let copy = CGDataProviderCopyData(provider)
+        let provider = imageRef!.dataProvider
+        let copy = provider!.data
         let source = CFDataGetBytePtr(copy)
         memcpy(inBuffer.data, source, bytes)
         
@@ -48,9 +56,9 @@ extension UIImage {
             outBuffer.data = temp
         }
         
-        let colorSpace = CGImageGetColorSpace(imageRef)
-        let bitmapInfo = CGImageGetBitmapInfo(imageRef)
-        let bitmapContext = CGBitmapContextCreate(inBuffer.data, width, height, 8, rowBytes, colorSpace, bitmapInfo.rawValue)
+        let colorSpace = imageRef!.colorSpace
+        let bitmapInfo = imageRef!.bitmapInfo
+        let bitmapContext = CGContext(data: inBuffer.data, width: width, height: height, bitsPerComponent: 8, bytesPerRow: rowBytes, space: colorSpace!, bitmapInfo: bitmapInfo.rawValue)
         defer {
             free(outBuffer.data)
             free(tempBuffer)
@@ -58,27 +66,48 @@ extension UIImage {
         }
         
         if let color = blendColor {
-            CGContextSetFillColorWithColor(bitmapContext, color.CGColor)
-            CGContextSetBlendMode(bitmapContext, CGBlendMode.PlusLighter)
-            CGContextFillRect(bitmapContext, CGRect(x: 0, y: 0, width: width, height: height))
+            bitmapContext!.setFillColor(color.cgColor)
+            bitmapContext!.setBlendMode(CGBlendMode.plusLighter)
+            bitmapContext!.fill(CGRect(x: 0, y: 0, width: width, height: height))
         }
         
-        if let bitmap = CGBitmapContextCreateImage(bitmapContext) {
-            return UIImage(CGImage: bitmap, scale: scale, orientation: imageOrientation)
+        if let bitmap = bitmapContext!.makeImage() {
+            return UIImage(cgImage: bitmap, scale: scale, orientation: imageOrientation)
         }
         
         return nil
     }
     
-    func roundCorner(radius: CGFloat) -> UIImage? {
-        let rect = CGRect(origin: CGPointZero, size: size)
+    private func isARGB8888(imageRef: CGImage) -> Bool {
+        let alphaInfo = imageRef.alphaInfo
+        let isAlphaOnFirstPlace = (CGImageAlphaInfo.first == alphaInfo || CGImageAlphaInfo.first == alphaInfo || CGImageAlphaInfo.noneSkipFirst == alphaInfo || CGImageAlphaInfo.noneSkipLast == alphaInfo)
+        return imageRef.bitsPerPixel == 32 && imageRef.bitsPerComponent == 8 && (imageRef.bitmapInfo.rawValue & CGBitmapInfo.alphaInfoMask.rawValue) > 0 && isAlphaOnFirstPlace
+    }
+    
+    private func createARGB8888BitmapContext(from image: CGImage) -> CGContext? {
+        let pixelWidth = image.width
+        let pixelHeight = image.height
         
-        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.mainScreen().scale)
+        let bitmapBytesPerFow = pixelWidth * 4
+        let bitmapByCount = bitmapBytesPerFow * pixelHeight
+        
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        
+        let bitmapData = UnsafeMutableRawPointer.allocate(bytes: bitmapByCount, alignedTo: bitmapByCount)
+        let context = CGContext(data: bitmapData, width: pixelWidth, height: pixelHeight, bitsPerComponent: 8, bytesPerRow: bitmapBytesPerFow, space: colorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
+        
+        return context
+    }
+    
+    func roundCorner(_ radius: CGFloat) -> UIImage? {
+        let rect = CGRect(origin: CGPoint.zero, size: size)
+        
+        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
         let context = UIGraphicsGetCurrentContext()
         let path = UIBezierPath(roundedRect: rect, cornerRadius: radius)
-        CGContextAddPath(context, path.CGPath)
-        CGContextClip(context)
-        drawInRect(rect)
+        context!.addPath(path.cgPath)
+        context!.clip()
+        draw(in: rect)
         
         let output = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
@@ -87,14 +116,14 @@ extension UIImage {
     }
     
     func oval() -> UIImage? {
-        let rect = CGRect(origin: CGPointZero, size: size)
+        let rect = CGRect(origin: CGPoint.zero, size: size)
         
-        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.mainScreen().scale)
+        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
         let context = UIGraphicsGetCurrentContext()
-        let path = UIBezierPath(ovalInRect: rect)
-        CGContextAddPath(context, path.CGPath)
-        CGContextClip(context)
-        drawInRect(rect)
+        let path = UIBezierPath(ovalIn: rect)
+        context!.addPath(path.cgPath)
+        context!.clip()
+        draw(in: rect)
         
         let output = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
@@ -102,7 +131,7 @@ extension UIImage {
         return output
     }
     
-    func scaleToFill(targetSize: CGSize) -> UIImage {
+    func scaleToFill(_ targetSize: CGSize) -> UIImage {
         let targetAspect = targetSize.width / targetSize.height
         let aspect = size.width / size.height
         
@@ -115,15 +144,15 @@ extension UIImage {
         
         let cropRect = CGRect(origin: CGPoint(x: -abs(size.width - scaledSize.width) / 2, y: -abs(size.height - scaledSize.height) / 2), size: scaledSize)
         
-        UIGraphicsBeginImageContextWithOptions(scaledSize, false, UIScreen.mainScreen().nativeScale)
+        UIGraphicsBeginImageContextWithOptions(scaledSize, false, UIScreen.main.nativeScale)
         let context = UIGraphicsGetCurrentContext()
-        let path = UIBezierPath(rect: CGRect(origin: CGPointZero, size: size)).CGPath
-        CGContextAddPath(context, path)
-        CGContextClip(context)
-        drawInRect(CGRect(origin: cropRect.origin, size: size))
+        let path = UIBezierPath(rect: CGRect(origin: CGPoint.zero, size: size)).cgPath
+        context!.addPath(path)
+        context!.clip()
+        draw(in: CGRect(origin: cropRect.origin, size: size))
         let output = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        return output
+        return output!
     }
 }

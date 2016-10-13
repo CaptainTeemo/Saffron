@@ -11,18 +11,38 @@
 import Foundation
 import ImageIO
 
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+
 private var key: Void?
 
 // MARK: GIF
 extension UIImage {
     
-    var gifData: NSData? {
+    var gifData: Data? {
         set {
             objc_setAssociatedObject(self, &key, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
         get {
-            return objc_getAssociatedObject(self, &key) as? NSData
+            return objc_getAssociatedObject(self, &key) as? Data
         }
+    }
+    
+        /// Image is animated or not.
+    public var sf_isGIF: Bool {
+        if let data = gifData, let source = CGImageSourceCreateWithData(data as CFData, nil) , CGImageSourceGetCount(source) > 1 {
+            return true
+        }
+        return false
     }
     
     /**
@@ -32,36 +52,48 @@ extension UIImage {
      
      - returns: Animated UIImage.
      */
-    public class func animatedGIF(data: NSData) -> UIImage? {
-        guard let source = CGImageSourceCreateWithData(data, nil) else {
-            return nil
-        }
-        return UIImage.animatedImage(source)
+    public class func animatedGIF(_ data: Data) -> UIImage? {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
+        let image = UIImage.animatedImage(source)
+        image?.gifData = data
+        return image
     }
     
-    private class func delayForImageAtIndex(index: Int, source: CGImageSource!) -> Double {
+    /**
+     Get gif frames.
+     
+     - parameter data: Image data.
+     
+     - returns: Frames and duration.
+     */
+    public class func animatedFrames(_ data: Data) -> ([UIImage], Double) {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return ([], 0) }
+        return UIImage.frames(source)
+    }
+    
+    fileprivate class func delayForImageAtIndex(_ index: Int, source: CGImageSource!) -> Double {
         var delay = 0.1
         
         let cfProperties = CGImageSourceCopyPropertiesAtIndex(source, index, nil)
         
-        let gifProperties = unsafeBitCast(CFDictionaryGetValue(cfProperties, unsafeAddressOf(kCGImagePropertyGIFDictionary)), CFDictionary.self)
+        let gifProperties = unsafeBitCast(CFDictionaryGetValue(cfProperties, Unmanaged.passUnretained(kCGImagePropertyGIFDictionary).toOpaque()), to: CFDictionary.self)
         
-        var delayObject = unsafeBitCast(CFDictionaryGetValue(gifProperties, unsafeAddressOf(kCGImagePropertyGIFUnclampedDelayTime)), AnyObject.self)
+        var delayObject = unsafeBitCast(CFDictionaryGetValue(gifProperties, Unmanaged.passUnretained(kCGImagePropertyGIFUnclampedDelayTime).toOpaque()), to: AnyObject.self)
         
         if delayObject.doubleValue == 0 {
-            delayObject = unsafeBitCast(CFDictionaryGetValue(gifProperties, unsafeAddressOf(kCGImagePropertyGIFDelayTime)), AnyObject.self)
+            delayObject = unsafeBitCast(CFDictionaryGetValue(gifProperties, Unmanaged.passUnretained(kCGImagePropertyGIFDelayTime).toOpaque()), to: AnyObject.self)
         }
         
         delay = delayObject as! Double
         
-        if delay < 0.1 {
-            delay = 0.1
-        }
+//        if delay < 0.1 {
+//            delay = 0.1
+//        }
         
         return delay
     }
     
-    private class func gcdForPair(a: Int?, _ b: Int?) -> Int {
+    fileprivate class func gcdForPair(_ a: Int?, _ b: Int?) -> Int {
         var a = a
         var b = b
         // Check if one of them is nil
@@ -96,7 +128,7 @@ extension UIImage {
         }
     }
     
-    private class func gcdForArray(array: [Int]) -> Int {
+    fileprivate class func gcdForArray(_ array: [Int]) -> Int {
         if array.isEmpty {
             return 1
         }
@@ -110,15 +142,19 @@ extension UIImage {
         return gcd
     }
     
-    private class func animatedImage(source: CGImageSource) -> UIImage? {
+    fileprivate class func frames(_ source: CGImageSource) -> ([UIImage], Double) {
         let count = CGImageSourceGetCount(source)
         
         if count <= 1 {
-            return nil
+            if let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil) {
+                let image = UIImage(cgImage: cgImage)
+                return ([image], 0)
+            }
+            return ([], 0)
         }
         
-        var images = [CGImageRef]()
-        var delays = [Int]()
+        var images = [CGImage]()
+        var delays = [Double]()
         
         // Fill arrays
         for i in 0..<count {
@@ -129,14 +165,14 @@ extension UIImage {
             
             // At it's delay in cs
             let delaySeconds = UIImage.delayForImageAtIndex(Int(i), source: source)
-            delays.append(Int(delaySeconds * 1000.0)) // Seconds to ms
+            delays.append(delaySeconds * 1000.0) // Seconds to ms
         }
         
         // Calculate full duration
-        let duration: Int = {
-            var sum = 0
+        let duration: Double = {
+            var sum: Double = 0
             
-            for val: Int in delays {
+            for val in delays {
                 sum += val
             }
             
@@ -144,39 +180,43 @@ extension UIImage {
         }()
         
         // Get frames
-        let gcd = gcdForArray(delays)
+        let gcd = gcdForArray(delays.map { Int($0) })
         var frames = [UIImage]()
         
         var frame: UIImage
         var frameCount: Int
         for i in 0..<count {
-            frame = UIImage(CGImage: images[i])
-            frameCount = Int(delays[i] / gcd)
+            frame = UIImage(cgImage: images[i])
+            frameCount = Int(delays[i]) / gcd
             
             for _ in 0..<frameCount {
                 frames.append(frame)
             }
         }
         
-        let animation = UIImage.animatedImageWithImages(frames, duration: Double(duration) / 1000.0)
-        
-        return animation
+        return (frames, Double(duration) / 1000.0)
     }
     
-    class func decodeImage(image: UIImage?) -> UIImage? {
+    fileprivate class func animatedImage(_ source: CGImageSource) -> UIImage? {
+        let (frames, duration) = UIImage.frames(source)
+        let animatedImage = UIImage.animatedImage(with: frames, duration: duration)
+        return animatedImage
+    }
+    
+    class func decodeImage(_ image: UIImage?) -> UIImage? {
         guard let image = image else { return nil }
-        let imageRef = image.CGImage
+        let imageRef = image.cgImage
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         
-        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue | CGBitmapInfo.ByteOrder32Little.rawValue)
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue)
         
-        guard let context = CGBitmapContextCreate(nil, CGImageGetWidth(imageRef), CGImageGetHeight(imageRef), 8, CGImageGetWidth(imageRef) * 4, colorSpace, bitmapInfo.rawValue) else { return nil }
-        let rect = CGRect(origin: CGPointZero, size: CGSize(width: CGImageGetWidth(imageRef), height: CGImageGetHeight(imageRef)))
-        CGContextDrawImage(context, rect, imageRef)
+        guard let context = CGContext(data: nil, width: imageRef!.width, height: imageRef!.height, bitsPerComponent: 8, bytesPerRow: imageRef!.width * 4, space: colorSpace, bitmapInfo: bitmapInfo.rawValue) else { return nil }
+        let rect = CGRect(origin: CGPoint.zero, size: CGSize(width: imageRef!.width, height: imageRef!.height))
+        context.draw(imageRef!, in: rect)
         
-        guard let decompressedImageRef = CGBitmapContextCreateImage(context) else { return nil }
+        guard let decompressedImageRef = context.makeImage() else { return nil }
         
-        let decompressedImage = UIImage(CGImage: decompressedImageRef)
+        let decompressedImage = UIImage(cgImage: decompressedImageRef)
         
         return decompressedImage
     }

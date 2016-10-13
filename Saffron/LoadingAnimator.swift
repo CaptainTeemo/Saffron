@@ -24,12 +24,12 @@ import Foundation
     /**
      Report progress.
      */
-    optional func progress(received: Int64, _ total: Int64)
+    @objc optional func progress(_ received: Int64, _ total: Int64)
     
     /**
      Perform animation when showing image.
      */
-    optional func reveal()
+    @objc optional func reveal()
 }
 
 private let minMargin: CGFloat = 100
@@ -39,11 +39,11 @@ private let minMargin: CGFloat = 100
  */
 public enum RevealStyle {
         /// Fadein effect with duration.
-    case Fade(NSTimeInterval)
+    case fade(TimeInterval)
         /// Circle mask effect.
-    case Circle
+    case circle
         /// No effect.
-    case None
+    case none
 }
 
 /**
@@ -51,28 +51,28 @@ public enum RevealStyle {
  */
 public enum AnimatorStyle {
         /// Looks like a Material-Design loader.
-    case Material
+    case material
         /// No animator.
-    case None
+    case none
 }
 
 /// Builtin loading animator.
-public class DefaultAnimator: UIView {
-    private let loaderLayer = CAShapeLayer()
+open class DefaultAnimator: UIView {
+    fileprivate let loaderLayer = CAShapeLayer()
     
-    private var _progressBackgroundLayer: CAShapeLayer?
+    fileprivate var _progressBackgroundLayer: CAShapeLayer?
     
-    private let diameter: CGFloat = 50
+    fileprivate let diameter: CGFloat = 50
     
-    private var _reportProgress = false
+    fileprivate var _reportProgress = false
     
-    private var _lineWidth: CGFloat {
+    fileprivate var _lineWidth: CGFloat {
         return diameter / 25
     }
     
-    private var _revealStyle: RevealStyle = .None
+    fileprivate var _revealStyle: RevealStyle = .none
 
-    private var _animatorStyle: AnimatorStyle = .Material
+    fileprivate var _animatorStyle: AnimatorStyle = .material
     
     /**
      Init
@@ -84,14 +84,14 @@ public class DefaultAnimator: UIView {
      
      - returns: Instance.
      */
-    public init(loaderColor: UIColor = UIColor.redColor(), animatorStyle: AnimatorStyle, revealStyle: RevealStyle, reportProgress: Bool) {
-        super.init(frame: CGRectZero)
+    public init(loaderColor: UIColor = UIColor.red, animatorStyle: AnimatorStyle, revealStyle: RevealStyle, reportProgress: Bool) {
+        super.init(frame: CGRect.zero)
         
         switch animatorStyle {
-        case .Material:
+        case .material:
             loaderLayer.lineWidth = _lineWidth
             loaderLayer.fillColor = nil
-            loaderLayer.strokeColor = UIColor.redColor().CGColor
+            loaderLayer.strokeColor = UIColor.red.cgColor
             layer.addSublayer(loaderLayer)
         default:
             break
@@ -100,7 +100,7 @@ public class DefaultAnimator: UIView {
         _reportProgress = reportProgress
         _revealStyle = revealStyle
         _animatorStyle = animatorStyle
-        loaderLayer.strokeColor = loaderColor.CGColor
+        loaderLayer.strokeColor = loaderColor.cgColor
         
         if reportProgress {
             let progressBackgroundLayer = CAShapeLayer()
@@ -109,7 +109,7 @@ public class DefaultAnimator: UIView {
             
             var red: CGFloat = 0, blue: CGFloat = 0, green: CGFloat = 0, alpha: CGFloat = 0
             loaderColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-            progressBackgroundLayer.strokeColor = UIColor(red: red, green: green, blue: blue, alpha: alpha / 4).CGColor
+            progressBackgroundLayer.strokeColor = UIColor(red: red, green: green, blue: blue, alpha: alpha / 4).cgColor
             
             layer.addSublayer(progressBackgroundLayer)
             
@@ -117,7 +117,7 @@ public class DefaultAnimator: UIView {
         }
     }
     
-    private override init(frame: CGRect) {
+    fileprivate override init(frame: CGRect) {
         super.init(frame: frame)
         
     }
@@ -130,7 +130,7 @@ public class DefaultAnimator: UIView {
     /**
      Change frame here. Just ignore.
      */
-    override public func layoutSubviews() {
+    override open func layoutSubviews() {
         super.layoutSubviews()
         
         loaderLayer.frame = CGRect(
@@ -141,17 +141,17 @@ public class DefaultAnimator: UIView {
         )
         
         let path = UIBezierPath(arcCenter: CGPoint(x: loaderLayer.frame.width / 2, y: loaderLayer.frame.height / 2), radius: diameter / 2, startAngle: -CGFloat(M_PI_2), endAngle: CGFloat(3 * M_PI_2), clockwise: true)
-        loaderLayer.path = path.CGPath
+        loaderLayer.path = path.cgPath
         
         _progressBackgroundLayer?.frame = loaderLayer.frame
         
         if let _ = _progressBackgroundLayer {
-            let bgPath = UIBezierPath(ovalInRect: loaderLayer.bounds)
-            _progressBackgroundLayer?.path = bgPath.CGPath
+            let bgPath = UIBezierPath(ovalIn: loaderLayer.bounds)
+            _progressBackgroundLayer?.path = bgPath.cgPath
         }
     }
     
-    private func addAnimation() {
+    fileprivate func addAnimation() {
         loaderLayer.strokeStart = 0
         loaderLayer.strokeEnd = 1
         
@@ -160,7 +160,7 @@ public class DefaultAnimator: UIView {
         rotation.toValue = 2 * M_PI
         rotation.duration = 0.6
         rotation.repeatCount = .infinity
-        loaderLayer.addAnimation(rotation, forKey: "rotation")
+        loaderLayer.add(rotation, forKey: "rotation")
         
         let strokeStart = CABasicAnimation(keyPath: "strokeStart")
         strokeStart.repeatCount = Float.infinity
@@ -169,7 +169,7 @@ public class DefaultAnimator: UIView {
         strokeStart.fromValue = 0.4
         strokeStart.toValue = 0.9
         strokeStart.autoreverses = true
-        loaderLayer.addAnimation(strokeStart, forKey: "strokeStart")
+        loaderLayer.add(strokeStart, forKey: "strokeStart")
     }
     
     func dismiss() {
@@ -177,21 +177,21 @@ public class DefaultAnimator: UIView {
             loaderLayer.strokeEnd = 0
         }
         loaderLayer.removeAllAnimations()
-        hidden = true
+        isHidden = true
         superview?.layer.mask = nil
     }
     
-    func revealAnimation(style: RevealStyle) {
+    func revealAnimation(_ style: RevealStyle) {
         if let imageView = superview {
             switch style {
-            case .Circle:
+            case .circle:
                 let maskLayer = CAShapeLayer()
-                let fromPath = UIBezierPath(ovalInRect: CGRect(origin: imageView.center, size: CGSizeZero)).CGPath
+                let fromPath = UIBezierPath(ovalIn: CGRect(origin: imageView.center, size: CGSize.zero)).cgPath
                 maskLayer.path = fromPath
                 imageView.layer.mask = maskLayer
                 
                 let maskRadius = sqrt(imageView.center.x * imageView.center.x + imageView.center.y * imageView.center.y)
-                let toPath = UIBezierPath(ovalInRect: CGRect(x: imageView.frame.width / 2 - maskRadius, y: imageView.frame.height / 2 - maskRadius, width: maskRadius * 2, height: maskRadius * 2)).CGPath
+                let toPath = UIBezierPath(ovalIn: CGRect(x: imageView.frame.width / 2 - maskRadius, y: imageView.frame.height / 2 - maskRadius, width: maskRadius * 2, height: maskRadius * 2)).cgPath
                 
                 CATransaction.begin()
                 CATransaction.setDisableActions(true)
@@ -202,22 +202,22 @@ public class DefaultAnimator: UIView {
                 revealAnimation.fromValue = fromPath
                 revealAnimation.toValue = toPath
                 revealAnimation.duration = 0.8
-                revealAnimation.delegate = self
+//                revealAnimation.delegate = self
                 
-                maskLayer.addAnimation(revealAnimation, forKey: "reveal")
+                maskLayer.add(revealAnimation, forKey: "reveal")
                 
-            case .Fade(let duration):
+            case .fade(let duration):
                 imageView.alpha = 0
-                UIView.animateWithDuration(duration, animations: {
+                UIView.animate(withDuration: duration, animations: {
                     imageView.alpha = 1
                 })
-            case .None:
+            case .none:
                 break
             }
         }
     }
     
-    func updateProgress(progress: CGFloat) {
+    func updateProgress(_ progress: CGFloat) {
         CATransaction.begin()
         loaderLayer.strokeEnd = progress
         CATransaction.commit()
@@ -230,8 +230,8 @@ extension DefaultAnimator: LoadingAnimator {
      */
     public func startAnimation() {
         switch _animatorStyle {
-        case .Material:
-            hidden = false
+        case .material:
+            isHidden = false
             if _reportProgress {
                 updateProgress(0.1)
             } else {
@@ -248,7 +248,7 @@ extension DefaultAnimator: LoadingAnimator {
      */
     public func removeAnimation() {
         switch _animatorStyle {
-        case .Material:
+        case .material:
             dismiss()
         default:
             break
@@ -261,7 +261,7 @@ extension DefaultAnimator: LoadingAnimator {
      - parameter received: Received bytes.
      - parameter total:    Total bytes.
      */
-    public func progress(received: Int64, _ total: Int64) {
+    public func progress(_ received: Int64, _ total: Int64) {
         if _reportProgress {
             let progress = CGFloat(received) / CGFloat(total)
             if progress >= 0.1 {
@@ -280,7 +280,7 @@ extension DefaultAnimator: LoadingAnimator {
 
 extension DefaultAnimator {
     /// This should not be public.
-    override public func animationDidStop(anim: CAAnimation, finished flag: Bool) {
-        superview?.layer.mask = nil
-    }
+//    override public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+//        superview?.layer.mask = nil
+//    }
 }
