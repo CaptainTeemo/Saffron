@@ -11,7 +11,7 @@
 Saffron is a framework that gives a helping hand to download images and manage caches.
 
 ### Features
-* Generic Cache struct that can cache everything.
+* Thread safe and generic cache mechanism.
 * Convenient extensions for UIImageView that do download and cache things for you.
 * Built in loading animator which can be configured.
 * Options to process image (corner radius, scale and GaussianBlur).
@@ -32,12 +32,12 @@ imageView.sf_setImage(url, options: [.ScaleToFill(size), .CornerRadius(8), .Gaus
 
 ##### Cache
 ```swift
-var stringCache = Cache<String>(cacheDirectoryPath: cachePath)
+let stringCache = Cache<String, String>()
 // write to cache
-stringCache.write(key, value: value)
+stringCache[key] = "value"
 
 // fetch from cache
-let cachedString = stringCache.fetch(key)
+let cachedString = stringCache[key]
 ```
 
 
@@ -75,7 +75,6 @@ func whereImageViewShouldBeInitialized() {
 ![](https://raw.githubusercontent.com/CaptainTeemo/Saffron/master/demo_progress.gif)
 
 ### [API Documentation](http://rawgit.com/CaptainTeemo/Saffron/master/docs/index.html)
-
 
 ### Requirements
 * iOS 8.0+
