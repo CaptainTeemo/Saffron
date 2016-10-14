@@ -187,6 +187,9 @@ extension UIImage {
         var frameCount: Int
         for i in 0..<count {
             frame = UIImage(cgImage: images[i])
+            if let image = UIImage.decodeImage(frame) {
+                frame = image
+            }
             frameCount = Int(delays[i]) / gcd
             
             for _ in 0..<frameCount {

@@ -95,18 +95,6 @@ public final class ImageManager {
                 done(cachedImage)
             }
         }
-//        _cache.fetch(key, queryPolicy: queryPolicy) { (image) in
-//            self._queue.addOperation({ 
-//                var cachedImage = image
-//                if image?.gifData == nil {
-//                    cachedImage = UIImage.decodeImage(image)
-//                }
-//                dispatchOnMain({
-//                    done(cachedImage)
-//                })
-//            })
-//
-//        }
     }
     
     /**
