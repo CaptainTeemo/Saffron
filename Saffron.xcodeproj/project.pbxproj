@@ -13,6 +13,9 @@
 		CF9C105E1D3C8C1D00CF9D63 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9C105D1D3C8C1D00CF9D63 /* Error.swift */; };
 		CFA0B1B51D3B8D3000D98EA5 /* GifToVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA0B1B41D3B8D3000D98EA5 /* GifToVideo.swift */; };
 		CFA0B1B71D3B8D9200D98EA5 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFA0B1B61D3B8D9200D98EA5 /* AVFoundation.framework */; };
+		CFEA406B1DC98C1D0063C42F /* ThreadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEA406A1DC98C1D0063C42F /* ThreadHelper.swift */; };
+		CFEA406D1DC98C4A0063C42F /* CacheRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEA406C1DC98C4A0063C42F /* CacheRecorder.swift */; };
+		CFEA406F1DC98CF80063C42F /* ImageCacheRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEA406E1DC98CF80063C42F /* ImageCacheRecorder.swift */; };
 		CFFA749A1CBE2A82004D1FD9 /* Saffron.h in Headers */ = {isa = PBXBuildFile; fileRef = CFFA74991CBE2A82004D1FD9 /* Saffron.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFFA74A11CBE2A82004D1FD9 /* Saffron.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFFA74961CBE2A82004D1FD9 /* Saffron.framework */; };
 		CFFA74B61CBE2AA4004D1FD9 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA74B01CBE2AA4004D1FD9 /* Cache.swift */; };
@@ -43,6 +46,9 @@
 		CF9C105D1D3C8C1D00CF9D63 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		CFA0B1B41D3B8D3000D98EA5 /* GifToVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GifToVideo.swift; sourceTree = "<group>"; };
 		CFA0B1B61D3B8D9200D98EA5 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		CFEA406A1DC98C1D0063C42F /* ThreadHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadHelper.swift; sourceTree = "<group>"; };
+		CFEA406C1DC98C4A0063C42F /* CacheRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheRecorder.swift; sourceTree = "<group>"; };
+		CFEA406E1DC98CF80063C42F /* ImageCacheRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCacheRecorder.swift; sourceTree = "<group>"; };
 		CFFA74961CBE2A82004D1FD9 /* Saffron.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Saffron.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFFA74991CBE2A82004D1FD9 /* Saffron.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Saffron.h; sourceTree = "<group>"; };
 		CFFA749B1CBE2A82004D1FD9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -102,6 +108,8 @@
 			isa = PBXGroup;
 			children = (
 				CFFA74B01CBE2AA4004D1FD9 /* Cache.swift */,
+				CFEA406C1DC98C4A0063C42F /* CacheRecorder.swift */,
+				CFEA406E1DC98CF80063C42F /* ImageCacheRecorder.swift */,
 				CFFA74B21CBE2AA4004D1FD9 /* GifEncoder.swift */,
 				CFFA74B31CBE2AA4004D1FD9 /* ImageManager.swift */,
 				CFFA74B41CBE2AA4004D1FD9 /* LoadingAnimator.swift */,
@@ -113,6 +121,7 @@
 				CFFDE3451D13BA2C00D488C8 /* ProgressiveImage.swift */,
 				CFA0B1B41D3B8D3000D98EA5 /* GifToVideo.swift */,
 				CF9C105D1D3C8C1D00CF9D63 /* Error.swift */,
+				CFEA406A1DC98C1D0063C42F /* ThreadHelper.swift */,
 			);
 			path = Saffron;
 			sourceTree = "<group>";
@@ -245,13 +254,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFEA406B1DC98C1D0063C42F /* ThreadHelper.swift in Sources */,
 				CFFA74B81CBE2AA4004D1FD9 /* GifEncoder.swift in Sources */,
 				CFA0B1B51D3B8D3000D98EA5 /* GifToVideo.swift in Sources */,
 				CFFDE3461D13BA2C00D488C8 /* ProgressiveImage.swift in Sources */,
+				CFEA406F1DC98CF80063C42F /* ImageCacheRecorder.swift in Sources */,
 				CF9C105E1D3C8C1D00CF9D63 /* Error.swift in Sources */,
 				CFFA74B61CBE2AA4004D1FD9 /* Cache.swift in Sources */,
 				CFFA74BB1CBE2AA4004D1FD9 /* UIImageViewExtension.swift in Sources */,
 				CFFA74BA1CBE2AA4004D1FD9 /* LoadingAnimator.swift in Sources */,
+				CFEA406D1DC98C4A0063C42F /* CacheRecorder.swift in Sources */,
 				CF99679E1CD89BD000206629 /* ImageEditor.swift in Sources */,
 				CFFA74B91CBE2AA4004D1FD9 /* ImageManager.swift in Sources */,
 				CF99679C1CD8999D00206629 /* Option.swift in Sources */,

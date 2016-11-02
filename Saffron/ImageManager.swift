@@ -51,20 +51,6 @@ public final class ImageManager {
         NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidReceiveMemoryWarning, object: nil, queue: nil) { (notification) in
             self.purgeMemory()
         }
-        
-        _cache.manualArchive = { path, image in
-            let saved = FileManager.default.createFile(atPath: path, contents: image.sf_isGIF ? image.gifData : UIImagePNGRepresentation(image), attributes: nil)
-            if !saved {
-                print("save failed")
-            }
-        }
-        
-        _cache.manualUnarchive = { path in
-            if let data = FileManager.default.contents(atPath: path) {
-                return UIImage.animatedGIF(data)
-            }
-            return nil
-        }
     }
     
     /**

@@ -8,28 +8,18 @@
 
 import Foundation
 
-internal func dispatchOnMain(_ closure: @escaping () -> Void) {
-    if Thread.isMainThread {
-        closure()
-    } else {
-        DispatchQueue.main.async(execute: closure)
-    }
-}
-
 fileprivate let CachePrefix = "com.saffron.cache"
 
-public final class Cache<Key: Hashable, Value> {
+public final class Cache<Key: Hashable, Value: Any>: CacheRecorder {
+    public typealias T = Value
+    
     fileprivate let cacheURL: URL
     fileprivate var cacheEntity = [Key:Value]()
     fileprivate let queue = DispatchQueue(label: CachePrefix)
-
+    
     var dates = [Key:Date]()
     var semaphore = DispatchSemaphore(value: 1)
     var maxAge = TimeInterval.infinity
-    
-        /// Manual archive and unarchive should be used together.
-    public var manualArchive: ((String, Value) -> Void)?
-    public var manualUnarchive: ((String) -> Value?)?
     
     init(name: String = CachePrefix, cachePath: String = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]) {
         cacheURL = URL(fileURLWithPath: cachePath + "/" + name)
@@ -51,16 +41,13 @@ public final class Cache<Key: Hashable, Value> {
                 return v
             } else {
                 let path = self.path(for: key)
-                var result: Value?
-                if let manualUnarchive = manualUnarchive {
-                    result = manualUnarchive(path)
-                } else {
-                    result = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? Value
-                }
+                let result = unarchive(with: path)
                 if let v = result {
                     lock()
                     cacheEntity[key] = v
                     unlock()
+                } else {
+                    debugPrint("Cache missed for key: \(key)")
                 }
                 return result
             }
@@ -73,13 +60,9 @@ public final class Cache<Key: Hashable, Value> {
                 unlock()
                 
                 let path = self.path(for: key)
-                if let manualArchive = manualArchive {
-                    manualArchive(path, v)
-                } else {
-                    let saved = NSKeyedArchiver.archiveRootObject(v, toFile: path)
-                    if !saved {
-                        print("\(path) save failed")
-                    }
+                let saved = archive(with: path, value: v)
+                if !saved {
+                    print("\(path) save failed")
                 }
             }
         }
